@@ -10,30 +10,63 @@
 </head>
 <body>
 
-	<!-- 現在の年度及び月を取得する -->
-	<%
-		Month month = new Month();
-	%>
-	<%
-		int year_now = month.cal.get(Calendar.YEAR);
-	%>
-	<%
-		int month_now = month.cal.get(Calendar.MONTH) + 1;
-	%>
-	
+
 
 	<%
+		Month month = new Month();
+
+		// パラメータ確認。値がない、不正な場合-999をセット
+
+		String year_parameter = request.getParameter("YEAR");
+		String month_parameter = request.getParameter("MONTH");
+
+		System.out.println("年のパラメータは" + year_parameter);
+		System.out.println("月のパラメータは" + month_parameter);
+
+		int year_now = month.yearParameterCheck(year_parameter);
+		int month_now = month.monthParameterChaeck(month_parameter);
+
+		if (year_now == -999 || month_now == -999) {
+
+			//現在の年、月をセット
+			year_now = month.cal.get(Calendar.YEAR);
+			month_now = month.cal.get(Calendar.MONTH) + 1;
+
+		}
+
+		//12月の次は1月かつ次年度
+
+		if (month_now > 12) {
+
+			month_now = 1;
+			year_now++;
+
+		}
+
+		//逆もまた然り
+
+		if (month_now < 1) {
+
+			month_now = 12;
+			year_now--;
+
+		}
+
+		int date_now = month.cal.get(Calendar.DATE);
+
+		//monthインスタンスになんとなく現在の日時をセット
 		month.cal.set(Calendar.YEAR, year_now);
-	%>
-	<%
 		month.cal.set(Calendar.MONTH, month_now - 1);
-	%>
-	<%
 		month.cal.set(Calendar.DATE, 1);
 	%>
 
-	<p><%=year_now%>年<%=month_now%>月
-	</p>
+	<a
+		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
+	<a
+		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now - 1%>">前月</a>
+
+
+
 
 
 	<table border="1">
@@ -73,25 +106,23 @@
 
 			<%
 				}
-			%>
 
-
-
-
-
-			<%
+				//当月の最終日まで日付けを入れていく
 				for (int i = 1; i <= max_day; i++) {
 			%>
 
 
-			<td><%=i%></td>
+			<td><a
+				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>"><%=i%></a></td>
 
-
+			 
 			<%
 				month.cal.set(Calendar.DATE, i);
 			%>
+			
 
 
+			<!-- 土曜日なら次の列へ -->
 			<%
 				if (Calendar.SATURDAY == month.cal.get(Calendar.DAY_OF_WEEK)) {
 			%>
@@ -110,20 +141,23 @@
 
 		<!-- 当月の最終日が土曜日じゃない時、土曜日まで余白を埋める -->
 		<%
-			if (month.cal.get(Calendar.DAY_OF_WEEK) != 7) {
+			System.out.println("日付最終日までのループが終わった時点での年は" + month.cal.get(month.cal.YEAR));
+			System.out.println("月は" + month.cal.get(month.cal.MONTH));
+			System.out.println("問題の日は" + month.cal.get(month.cal.DATE));
+			System.out.println("曜日は" + month.cal.get(month.cal.DAY_OF_WEEK));
+		
+			if (month.cal.get(month.cal.DAY_OF_WEEK) < 7) {
+				System.out.println("ちっちぇぞぉ");
 		%>
 
 		<td>
-
-		<%
-			for (int count = month.cal.get(Calendar.DAY_OF_WEEK); count < 6; count++) {
-		%>
-
-		&nbsp;
-
-		<%
-			}
-		%>
+			<%
+				for (int count = month.cal.get(month.cal.DAY_OF_WEEK); count < 6; count++) {
+					
+					System.out.println("空白をいれるよん");
+			%> <td>&nbsp;</td> <%
+ 	}
+ %>
 
 		</td>
 		<%
