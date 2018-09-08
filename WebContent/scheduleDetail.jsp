@@ -15,15 +15,15 @@ div.inputForm {
 </head>
 <body>
 
-	<%
+	
+	
+	<%	
+		//パラメータ取得
 		int year_now = Integer.parseInt(request.getParameter("YEAR"));
-	%>
-	<%
 		int month_now = Integer.parseInt(request.getParameter("MONTH"));
-	%>
-	<%
 		int day_now = Integer.parseInt(request.getParameter("DAY"));
 	%>
+	
 
 	スケジュール詳細ページ&nbsp;<a href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
 	<table border="1">
@@ -55,7 +55,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form method="post" action="">
+		<form action = "/CalendarJsp/AddSchedule" method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>
@@ -199,7 +199,7 @@ div.inputForm {
 
 
 			<p>
-				<input type="submit" name="Register" value="登録する"> <input
+				<input type="submit" value="登録する"> <input
 					type="reset" value="入力し直す">
 			
 			

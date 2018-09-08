@@ -20,11 +20,8 @@
 		String year_parameter = request.getParameter("YEAR");
 		String month_parameter = request.getParameter("MONTH");
 
-		System.out.println("年のパラメータは" + year_parameter);
-		System.out.println("月のパラメータは" + month_parameter);
-
-		int year_now = month.yearParameterCheck(year_parameter);
-		int month_now = month.monthParameterChaeck(month_parameter);
+		int year_now = month.intParameterCheck(year_parameter);
+		int month_now = month.intParameterCheck(month_parameter);
 
 		if (year_now == -999 || month_now == -999) {
 
@@ -115,11 +112,11 @@
 			<td><a
 				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>"><%=i%></a></td>
 
-			 
+
 			<%
 				month.cal.set(Calendar.DATE, i);
 			%>
-			
+
 
 
 			<!-- 土曜日なら次の列へ -->
@@ -145,19 +142,20 @@
 			System.out.println("月は" + month.cal.get(month.cal.MONTH));
 			System.out.println("問題の日は" + month.cal.get(month.cal.DATE));
 			System.out.println("曜日は" + month.cal.get(month.cal.DAY_OF_WEEK));
-		
+
 			if (month.cal.get(month.cal.DAY_OF_WEEK) < 7) {
-				System.out.println("ちっちぇぞぉ");
 		%>
 
 		<td>
 			<%
 				for (int count = month.cal.get(month.cal.DAY_OF_WEEK); count < 6; count++) {
-					
-					System.out.println("空白をいれるよん");
-			%> <td>&nbsp;</td> <%
- 	}
- %>
+
+			%>
+		
+		<td>&nbsp;</td>
+		<%
+			}
+		%>
 
 		</td>
 		<%

@@ -10,58 +10,51 @@ public class Month {
 	public int month;
 	public Calendar cal = Calendar.getInstance();
 	public int count;
+	public int return_int_value;
+	public String return_string_value;
 
-	// パラメータの年度確認
-	public int yearParameterCheck(String year_parameter) {
+	// パラメータの確認int型ver
+	public int intParameterCheck(String parameter) {
 
-		if (year_parameter == null || year_parameter.length() == 0) {
+		if (parameter == null || parameter.length() == 0) {
 
-			year = -999;
+			return_int_value = -999;
 
 		} else {
 
 			try {
 
-				year = Integer.parseInt(year_parameter);
+				return_int_value = Integer.parseInt(parameter);
 
 			} catch (NumberFormatException e) {
 
-				year = -999;
+				return_int_value = -999;
 
 			}
 		}
 
-		return year;
+		return return_int_value;
 	}
 
-	
-	//月バージョン
-	public int monthParameterChaeck(String month_parameter) {
+	public String stringParameterCheck(String parameter) {
 
-		if (month_parameter == null || month_parameter.length() == 0) {
-			
-			month = -999;
+		if (parameter == null || parameter.length() == 0) {
+
+			return_string_value = "";
 
 		} else {
-			
+
 			try {
-				
-				month = Integer.parseInt(month_parameter);
-				
+
+				return_string_value = parameter;
+
 			} catch (NumberFormatException e) {
-				
-				month = -999;
-				
+
+				return_string_value = "";
+
 			}
 		}
-		
-		return month;
 
+		return return_string_value;
 	}
-	
-	 
-	
-	
-	
-
 }
