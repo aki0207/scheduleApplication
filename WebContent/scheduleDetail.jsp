@@ -9,23 +9,27 @@
 div.inputForm {
 	position: absolute;
 	top: 10px;
-	right: 700px;
+	right: 600px;
 }
 </style>
 </head>
 <body>
 
-	
-	
-	<%	
-		//パラメータ取得
-		int year_now = Integer.parseInt(request.getParameter("YEAR"));
-		int month_now = Integer.parseInt(request.getParameter("MONTH"));
-		int day_now = Integer.parseInt(request.getParameter("DAY"));
-	%>
-	
 
-	スケジュール詳細ページ&nbsp;<a href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
+
+
+	<%
+		//セッションから値を取得
+		int year_now = Integer.parseInt((String)request.getAttribute("YEAR"));
+		int month_now = Integer.parseInt((String)request.getAttribute("MONTH"));
+		int day_now = Integer.parseInt((String)request.getAttribute("DAY"));
+		String[] schedule_array  = ((String[]) request.getAttribute("SCHEDULEARRAY"));
+	%>
+
+
+	スケジュール詳細ページ&nbsp;
+	<a
+		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -38,7 +42,7 @@ div.inputForm {
 		%>
 		<tr>
 			<td><%=i%>:00</td>
-			<td width="800" height="30">&nbsp;</td>
+			<td width="800" height="30"><%= schedule_array[i] %></td>
 		</tr>
 
 
@@ -55,7 +59,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form action = "/CalendarJsp/AddSchedule" method="post">
+		<form action="/CalendarJsp/AddSchedule" method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>
@@ -65,68 +69,77 @@ div.inputForm {
 								for (int i = year_now; i < year_now + 5; i++) {
 							%>
 
-								<%	//パラメータをプルダウンメニューの初期値にする
+							<%
+								//パラメータをプルダウンメニューの初期値にする
 									if (i == year_now) {
-								%>
+							%>
 
-										<option value=<%=year_now%> selected><%=i%>年
+							<option value=<%=year_now%> selected><%=i%>年
 
 								<%
-									}
-								%>
-
-									<option value=<%=year_now%>><%=i%>年
-								
-							<%
 								}
 							%>
+							
+							<option value=<%=year_now%>><%=i%>年
 
-							</select> <select name="MONTH">
+								<%
+															}
+														%>
+							
+					</select> <select name="MONTH">
+
 
 							<%
-								for (int j = month_now; j < 13; j++) {
+								for (int j = 1; j < 13; j++) {
 							%>
 
-								<%
-									if (j == month_now) {
-								%>
+							<%
+								if (j == month_now) {
+							%>
 
-										<option value=<%=j%> selected><%=j%>月
-							
-								<%
-									}
-								%>
-							
-									<option value=<%=j%>><%=j%>月
+							<option value=<%=j%> selected><%=j%>日
 
-							<% } %>
-								
+								<%
+								}
+							%>
 							
-							</select> <select name="DAY">
+							<option value=<%=j%>><%=j%>月
+
+								<%
+															}
+														%>
+							
+					</select> <select name="DAY">
 
 							<%
 								for (int k = 1; k < 32; k++) {
 							%>
-							
-								<%
-									if(k == day_now) {
-								%>
-								
-									<option value=<%=k%> selected><%=k%>日
-									
-								<%
-									}
-								%>
 
-							<option value=<%=k%>><%=k%>日
+							<%
+								if (k == day_now) {
+							%>
 
+							<option value=<%=k%> selected><%=k%>日
 
 								<%
 								}
 							%>
+
+								<%
+									if (k != day_now) {
+								%>
 							
-					
-					
+							<option value=<%=k%>><%=k%>日
+
+								<%
+															}
+														%>
+
+
+								<%
+									}
+								%>
+							
 					</select></td>
 				</tr>
 
@@ -145,16 +158,10 @@ div.inputForm {
 								}
 							%>
 							
-					
-					
 					</select> <select name="SMINUTE">
 
 							<option value="0">00分
-							
-							
 							<option value="30">30分
-					
-					
 					</select> ～ <select name="EHOUR">
 
 							<%
@@ -167,19 +174,13 @@ div.inputForm {
 								}
 							%>
 							
-					
-					
 					</select> <select name="EMINUTE">
 
-							<option value="">--分
-							
-							
+
+
+
 							<option value="0">00分
-							
-							
 							<option value="30">30分
-					
-					
 					</select></td>
 				</tr>
 
@@ -199,13 +200,9 @@ div.inputForm {
 
 
 			<p>
-				<input type="submit" value="登録する"> <input
-					type="reset" value="入力し直す">
-			
-			
+				<input type="submit" value="登録する"> <input type="reset"
+					value="入力し直す">
 			<p>
-		
-		
 		</form>
 
 

@@ -81,6 +81,11 @@ public class AddSchedule extends HttpServlet {
 		}
 
 		
+		String date_format;
+		String date_query;
+		String start_time_query;
+		String end_time_query;
+		
 		// 0埋め
 		month = String.format("%02d", Integer.parseInt(month));
 		day = String.format("%02d", Integer.parseInt(day));
@@ -92,23 +97,20 @@ public class AddSchedule extends HttpServlet {
 
 		// insert文のwhere旬に代入する値を準備
 		// sql実行のためにフォーマットを整る
-		String date_format = "'" + year + "-" + month + "-" + day  ;
-		String date_query = date_format + " 00:00:00'";
-		String start_time_query =date_format + " " + shour + ":" + sminute + ":00'";
-		String end_time_query = date_format + " " + ehour + ":" + eminute + ":00'";
+		date_format = "'" + year + "-" + month + "-" + day  ;
+		date_query = date_format + " 00:00:00'";
+		start_time_query =date_format + " " + shour + ":" + sminute + ":00'";
+		end_time_query = date_format + " " + ehour + ":" + eminute + ":00'";
 		// 日付が指定されていない場合開始時間及び終了時間をnullで登録
 		
 	
 
 		if (shour.equals("") || sminute.equals("") || eminute.equals("") || ehour.equals("")) {
-			System.out.println("日付おかしいぞぉ");
 			start_time_query = null;
 			end_time_query = null;
 
 		}
-		System.out.println("おかしいといわれてる月の値は" + date_query);
-		System.out.println("おかしいといわれているはじまりの時間の値は" + start_time_query);
-		System.out.println("おかしいといわれているおわりの時間の値は" + end_time_query);
+		
 
 		response.setContentType("text/html; charset=UTF-8");
 
@@ -122,7 +124,7 @@ public class AddSchedule extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
 			// insert文を準備
-			String sql = "insert  into schedule (id,userid, scheduledate, starttime, endtime, schedule, schedulememo) values ( 1,2," + "to_date(" +date_query + ",'YYYY-MM-DD HH24:MI:SS')," + "to_date(" + start_time_query + ",'YYYY-MM-DD HH24:MI:SS'),"  + "to_date(" + end_time_query + ",'YYYY-MM-DD HH24:MI:SS'),'" + plan + "'," + "'" +memo + "')"; 
+			String sql = "insert  into schedule (id, scheduledate, starttime, endtime, schedule, schedulememo) values ( 1," + "to_date(" +date_query + ",'YYYY-MM-DD HH24:MI:SS')," + "to_date(" + start_time_query + ",'YYYY-MM-DD HH24:MI:SS'),"  + "to_date(" + end_time_query + ",'YYYY-MM-DD HH24:MI:SS'),'" + plan + "'," + "'" +memo + "')"; 
 			
 			System.out.println("実行するsqlはこれだ!" + sql);
 			PreparedStatement pstmt = conn.prepareStatement(sql);

@@ -110,7 +110,7 @@
 
 
 			<td><a
-				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>"><%=i%></a></td>
+				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>"><%=i%></a></td>
 
 
 			<%
