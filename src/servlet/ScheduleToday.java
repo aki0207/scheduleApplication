@@ -32,7 +32,6 @@ public class ScheduleToday extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		System.out.println("俺をみろぉぉぉ！");
 
 		// パラメータ取得
 		String year_now = request.getParameter("YEAR");
@@ -49,10 +48,12 @@ public class ScheduleToday extends HttpServlet {
 		int id = 1;
 
 		String[] schedule_array = new String[24];
+		String[] schedule_memo_array = new String[24];
 
 		for (int i = 0; i < 24; i++) {
 
 			schedule_array[i] = "";
+			schedule_memo_array[i] = "";
 
 		}
 
@@ -67,26 +68,16 @@ public class ScheduleToday extends HttpServlet {
 			// データベースへ接続
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
-			// select文を準備
-			/*String sql = "select schedule,schedulememo from schedule where id =  and STARTTIME = to_date('"
-					+ specified_day + "','YYYY-MM-DD HH24:MI:SS')";
-
-			System.out.println("実行するsqlはこれだ!" + sql);
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-			
-			
-*/
+		
 
 			PreparedStatement stmt = conn.prepareStatement(
 					"SELECT * FROM schedule WHERE ID = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS')");
 			System.out.println(specified_day);
+			// sql文の値をセット
 			stmt.setInt(1, 1);
 			stmt.setString(2, specified_day);
-			ResultSet rs = stmt.executeQuery();
-			
-			
 			// selectを実行し、結果票を取得
-			//ResultSet rs = pstmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
 			// 結果表に格納されたレコードの内容を表示
 			while (rs.next()) {
@@ -94,24 +85,30 @@ public class ScheduleToday extends HttpServlet {
 				String start_time = rs.getString("STARTTIME");
 				String end_time = rs.getString("ENDTIME");
 				String schedule = rs.getString("SCHEDULE");
-
+				String schedule_memo = rs.getString("SCHEDULEMEMO");
+				
+				System.out.println("めもはこうだ!" + schedule_memo);
+				
+				//0から23の数字と比較したいから時分秒の時分を抜き出し
 				String start_time_time = start_time.substring(11, 13);
 				String start_time_minute = start_time.substring(14, 16);
 				String end_time_time = end_time.substring(11, 13);
 				String end_time_minute = end_time.substring(14, 16);
+				//スケジュール欄に表示させる時間
 				String totale_time = start_time_time + ":" + start_time_minute + "-" + end_time_time + ":"
 						+ end_time_minute + " ";
+				
+				
 
 				for (int i = 0; i < 24; i++) {
 
 					String character_conversion = Integer.toString(i);
 					String time_schedule = String.format("%02d", Integer.parseInt(character_conversion));
-					System.out.println(time_schedule);
-					System.out.println(start_time_time);
 
 					if (start_time_time.equals(time_schedule)) {
-
+						
 						schedule_array[i] = totale_time + schedule;
+						schedule_memo_array[i] = schedule_memo;
 
 					}
 
@@ -148,15 +145,15 @@ public class ScheduleToday extends HttpServlet {
 
 		}
 
-		System.out.println("sessionにはこいつらをいれるよ.year" + year_now + ":month:" + month_now + ":day:" + day_now);
-
+		//配列のインデックス番号指定用
 		request.setAttribute("YEAR", year_now);
 		request.setAttribute("MONTH", month_now);
 		request.setAttribute("DAY", day_now);
 		request.setAttribute("SCHEDULEARRAY", schedule_array);
+		request.setAttribute("SCHEDULEMEMOARRAY", schedule_memo_array);
 
 		// ユーザーのスケジュール表示画面へフォワード
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/scheduleDetail.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/scheduleIndex.jsp");
 		dispatcher.forward(request, response);
 
 	}

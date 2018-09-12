@@ -45,34 +45,24 @@ public class AddSchedule extends HttpServlet {
 		Month m = new Month();
 
 		// パラメータが不正な値じゃないかチェック×2
-		
 		 request.setCharacterEncoding("UTF-8");
 		parameter = request.getParameter("YEAR");
-		System.out.println("年は" + parameter);
 		year = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("MONTH");
-		System.out.println("月は" + parameter);
 		month = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("DAY");
-		System.out.println("日は" + parameter);
 		day = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("SHOUR");
-		System.out.println("shourは" + parameter);
 		shour = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("SMINUTE");
-		System.out.println("sminuteは" + parameter);
 		sminute = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("EHOUR");
-		System.out.println("ehourは" + parameter);
 		ehour = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("EMINUTE");
-		System.out.println("eminuteは" + parameter);
 		eminute = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("PLAN");
-		System.out.println("planは" + parameter);
 		plan = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("MEMO");
-		System.out.println("memoは" + parameter);
 		memo = m.stringParameterCheck(parameter);
 
 		// 日付が不正な値な時、パラメータ無しでCalendar.jspにリダイレクト
@@ -166,14 +156,14 @@ public class AddSchedule extends HttpServlet {
 		}
 		
 		//ただmonthから1ひきたかっただけなんだ…
-		int month_numeric_value = Integer.parseInt(month) - 1;
+		//int month_numeric_value = Integer.parseInt(month) - 1;
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("/CalendarJsp/Calendar.jsp");
 		sb.append("?YEAR=");
 		sb.append(year);
 		sb.append("&MONTH=");
-		sb.append(month_numeric_value);
+		sb.append(month);
 		response.sendRedirect(new String(sb));
 	}
 }

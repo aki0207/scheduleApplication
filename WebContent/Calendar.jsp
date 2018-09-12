@@ -138,11 +138,7 @@
 
 		<!-- 当月の最終日が土曜日じゃない時、土曜日まで余白を埋める -->
 		<%
-			System.out.println("日付最終日までのループが終わった時点での年は" + month.cal.get(month.cal.YEAR));
-			System.out.println("月は" + month.cal.get(month.cal.MONTH));
-			System.out.println("問題の日は" + month.cal.get(month.cal.DATE));
-			System.out.println("曜日は" + month.cal.get(month.cal.DAY_OF_WEEK));
-
+			
 			if (month.cal.get(month.cal.DAY_OF_WEEK) < 7) {
 		%>
 
