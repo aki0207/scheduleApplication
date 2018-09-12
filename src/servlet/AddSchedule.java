@@ -80,7 +80,7 @@ public class AddSchedule extends HttpServlet {
 		month = String.format("%02d", Integer.parseInt(month));
 		day = String.format("%02d", Integer.parseInt(day));
 		shour = String.format("%02d", Integer.parseInt(shour));
-		sminute = String.format("%02d", Integer.parseInt(shour));
+		sminute = String.format("%02d", Integer.parseInt(sminute));
 		ehour = String.format("%02d", Integer.parseInt(ehour));
 		eminute = String.format("%02d", Integer.parseInt(eminute));
 		

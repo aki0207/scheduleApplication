@@ -20,20 +20,19 @@ div.inputForm {
 
 	<%
 		//なんかjspからjspに移動するときセッションの値消えるらしいから再度セッションに保存
-		session.setAttribute("YEAR", request.getAttribute("YEAR"));
-		session.setAttribute("MONTH", request.getAttribute("MONTH"));
-		session.setAttribute("DAY", request.getAttribute("DAY"));
-		session.setAttribute("SCHEDULEARRAY", request.getAttribute("SCHEDULEARRAY"));
-		session.setAttribute("SCHEDULEMEMOARRAY", request.getAttribute("SCHEDULEMEMOARRAY"));
+		session.setAttribute("YEAR", session.getAttribute("YEAR"));
+		session.setAttribute("MONTH", session.getAttribute("MONTH"));
+		session.setAttribute("DAY", session.getAttribute("DAY"));
+		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
+		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
 		//パラメータで送る用
 		String total_time = "";
-
 		//セッションから値を取得
-		int year_now = Integer.parseInt((String) request.getAttribute("YEAR"));
-		int month_now = Integer.parseInt((String) request.getAttribute("MONTH"));
-		int day_now = Integer.parseInt((String) request.getAttribute("DAY"));
-		String[] schedule_array = ((String[]) request.getAttribute("SCHEDULEARRAY"));
-		String[] schedule_memo_array = ((String[]) request.getAttribute("SCHEDULEMEMOARRAY"));
+		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
+		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
+		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
+		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
+		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
 	%>
 
 
@@ -63,7 +62,6 @@ div.inputForm {
 			<!-- 時分をDetailに送るため -->
 			<%
 				if (schedule_array[i].length() != 0) {
-
 						total_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a

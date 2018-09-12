@@ -19,6 +19,13 @@ div.dispSchedule {
 
 
 	<%
+	
+	//なんかjspからjspに移動するときセッションの値消えるらしいから再度セッションに保存
+			session.setAttribute("YEAR", session.getAttribute("YEAR"));
+			session.setAttribute("MONTH", session.getAttribute("MONTH"));
+			session.setAttribute("DAY", session.getAttribute("DAY"));
+			session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
+			session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String)session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String)session.getAttribute("MONTH"));
@@ -28,14 +35,13 @@ div.dispSchedule {
 		//パラメータも取得
 		String totale_time = request.getParameter("TOTALETIME");
 		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
-		//整形
-		schedule_array[index_number] = schedule_array[index_number].substring(11);
+	
 	%>
 
 
 	スケジュール詳細ページ&nbsp;
 	<a
-		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
+		href="/CalendarJsp/scheduleIndex.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%= day_now %>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>

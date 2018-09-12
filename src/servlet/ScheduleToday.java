@@ -144,12 +144,12 @@ public class ScheduleToday extends HttpServlet {
 
 		}
 
-		//配列のインデックス番号指定用
-		request.setAttribute("YEAR", year_now);
-		request.setAttribute("MONTH", month_now);
-		request.setAttribute("DAY", day_now);
-		request.setAttribute("SCHEDULEARRAY", schedule_array);
-		request.setAttribute("SCHEDULEMEMOARRAY", schedule_memo_array);
+		HttpSession session = request.getSession();
+		session.setAttribute("YEAR", year_now);
+		session.setAttribute("MONTH", month_now);
+		session.setAttribute("DAY", day_now);
+		session.setAttribute("SCHEDULEARRAY", schedule_array);
+		session.setAttribute("SCHEDULEMEMOARRAY", schedule_memo_array);
 
 		// ユーザーのスケジュール表示画面へフォワード
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/scheduleIndex.jsp");
