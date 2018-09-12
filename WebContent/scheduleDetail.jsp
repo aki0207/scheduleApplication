@@ -28,6 +28,8 @@ div.dispSchedule {
 		//パラメータも取得
 		String totale_time = request.getParameter("TOTALETIME");
 		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
+		//整形
+		schedule_array[index_number] = schedule_array[index_number].substring(11);
 	%>
 
 
@@ -68,7 +70,7 @@ div.dispSchedule {
 			</tr>
 			<tr>
 				<td>時間</td>
-				<td width="400" height="30"><%= totale_time%>時</td>
+				<td width="400" height="30"><%= totale_time%></td>
 			</tr>
 			<tr>
 				<td>スケジュール</td>

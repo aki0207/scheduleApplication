@@ -87,7 +87,6 @@ public class ScheduleToday extends HttpServlet {
 				String schedule = rs.getString("SCHEDULE");
 				String schedule_memo = rs.getString("SCHEDULEMEMO");
 				
-				System.out.println("めもはこうだ!" + schedule_memo);
 				
 				//0から23の数字と比較したいから時分秒の時分を抜き出し
 				String start_time_time = start_time.substring(11, 13);

@@ -27,10 +27,6 @@ div.inputForm {
 		session.setAttribute("SCHEDULEMEMOARRAY", request.getAttribute("SCHEDULEMEMOARRAY"));
 		//パラメータで送る用
 		String total_time = "";
-		String schedule = "";
-		String schedule_memo = "";
-		
-		
 
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String) request.getAttribute("YEAR"));
@@ -69,12 +65,12 @@ div.inputForm {
 				if (schedule_array[i].length() != 0) {
 
 						total_time = schedule_array[i].substring(0, 11);
-						schedule = schedule_array[i];
-						schedule_memo = schedule_memo_array[i];
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=total_time%>&SCHEDULE=<%= schedule %>&SCHEDULEMEMO=<%= schedule_memo %>&INDEXNO=<%= i%>"><%=schedule_array[i]%></a></td>
-				
+				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=total_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+
+
+
 			<%
 				} else {
 			%>
@@ -84,7 +80,7 @@ div.inputForm {
 			<%
 				}
 			%>
-			
+
 		</tr>
 
 
