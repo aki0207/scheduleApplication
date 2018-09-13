@@ -86,10 +86,10 @@ public class ScheduleEdit extends HttpServlet {
 
 		// update文のwhere旬に代入する値を準備
 		// sql実行のためにフォーマットを整る
-		date_format = "'" + year + "-" + month + "-" + day;
-		date_query = date_format + " 00:00:00'";
-		start_time_query = date_format + " " + shour + ":" + sminute + ":00'";
-		end_time_query = date_format + " " + ehour + ":" + eminute + ":00'";
+		date_format = year + "-" + month + "-" + day;
+		date_query = date_format + " 00:00:00";
+		start_time_query = date_format + " " + shour + ":" + sminute + ":00";
+		end_time_query = date_format + " " + ehour + ":" + eminute + ":00";
 
 		// セッション及びパラメータから値を持って来て、where旬で更新元のデータを指定するための値を用意
 		HttpSession session = request.getSession();
@@ -106,7 +106,6 @@ public class ScheduleEdit extends HttpServlet {
 		// 整形して実際に流されるのものがこちら
 		String edit_target_search_query = edit_target_year + "-" + edit_target_month + "-" + edit_target_day + " "
 				+ edit_target_start_time;
-		System.out.println("where旬で指定している時間の部分:" + edit_target_search_query);
 		int edit_id = 1;
 
 		response.setContentType("text/html; charset=UTF-8");
@@ -121,20 +120,26 @@ public class ScheduleEdit extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
 			// update文を準備
-			String sql = "update schedule SET schedule = case id WHEN ? THEN ? END, schedulememo = case id WHEN ? THEN ? END WHERE  id = ? and STARTTIME = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
-						//  update schedule SET schedule = case id WHEN 1 THEN '入力されたセレクトボックスのスケジュールタイトル' END, schedulememo = case id WHEN 1 THEN '入力されたメモの部分' END WHERE  id = 1 and STARTTIME = 'edit_なんちゃらクエリー'
-			
+			String sql = "update schedule set scheduledate = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end, starttime = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end,endtime = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end, schedule = case id when ? then ? END, schedulememo = case id when ? then ? end where  id = ? and starttime = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
 			
 			// ?にセット
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, edit_id);
-			stmt.setString(2, plan);
+			stmt.setString(2, date_query);
 			stmt.setInt(3, edit_id);
-			stmt.setString(4, memo);
+			stmt.setString(4, start_time_query);
 			stmt.setInt(5, edit_id);
-			stmt.setString(6, edit_target_search_query);
+			stmt.setString(6, end_time_query);
+			stmt.setInt(7, edit_id);
+			stmt.setString(8, plan);
+			stmt.setInt(9, edit_id);
+			stmt.setString(10, memo);
+			stmt.setInt(11, edit_id);
+			stmt.setString(12, edit_target_search_query);
 			
-			System.out.println("sqlじっこうしまっせ");
+			
+		
+			
 
 			// UPDATE文を実行する
 			int num = stmt.executeUpdate();
