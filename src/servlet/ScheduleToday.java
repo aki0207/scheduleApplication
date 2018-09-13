@@ -73,7 +73,7 @@ public class ScheduleToday extends HttpServlet {
 			PreparedStatement stmt = conn.prepareStatement(
 					"SELECT * FROM schedule WHERE ID = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS')");
 			System.out.println(specified_day);
-			// sql文の値をセット
+			//sql文の値をセット
 			stmt.setInt(1, 1);
 			stmt.setString(2, specified_day);
 			// selectを実行し、結果票を取得

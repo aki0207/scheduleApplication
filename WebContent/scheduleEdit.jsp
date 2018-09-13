@@ -25,21 +25,23 @@ div.inputForm {
 		session.setAttribute("DAY", session.getAttribute("DAY"));
 		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
-		//パラメータで送る用
-		String total_time = "";
+
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
+		
 		//パラメータ取得
 		String totale_time = request.getParameter("TOTALETIME");
 		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
+		
+		
+		
 	%>
 
-
-
+	
 
 
 
@@ -48,8 +50,9 @@ div.inputForm {
 	スケジュール詳細ページ&nbsp;
 	<br>
 
-	
-		<a href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0)%>">戻る</a>
+
+	<a
+		href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0)%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -65,10 +68,10 @@ div.inputForm {
 			<!-- 時分をDetailに送るため -->
 			<%
 				if (schedule_array[i].length() != 0) {
-						total_time = schedule_array[i].substring(0, 11);
+						totale_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=total_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
 
 
 
@@ -99,7 +102,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form action="/CalendarJsp/AddSchedule" method="post">
+		<form action="/CalendarJsp/ScheduleEdit?TOTALETIME=<%= totale_time %>&INDEXNO=<%=index_number%>" method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>

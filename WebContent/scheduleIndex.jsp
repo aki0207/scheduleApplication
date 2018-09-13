@@ -26,7 +26,7 @@ div.inputForm {
 		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
 		//パラメータで送る用
-		String total_time = "";
+		String totale_time = "";
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
@@ -62,10 +62,10 @@ div.inputForm {
 			<!-- 時分をDetailに送るため -->
 			<%
 				if (schedule_array[i].length() != 0) {
-						total_time = schedule_array[i].substring(0, 11);
+						totale_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=total_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
 
 
 

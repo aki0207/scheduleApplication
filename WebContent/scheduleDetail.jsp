@@ -25,12 +25,18 @@ div.dispSchedule {
 		session.setAttribute("DAY", session.getAttribute("DAY"));
 		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
+		
+		
+		
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
+		
+		
+		
 		//パラメータを取得
 		String totale_time = request.getParameter("TOTALETIME");
 		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
