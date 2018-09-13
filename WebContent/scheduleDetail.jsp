@@ -85,9 +85,7 @@ div.dispSchedule {
 			</tr>
 			<tr>
 				<td>スケジュール</td>
-				<td width="400" height="30">
-				
-				<%=schedule_array[index_number].substring(11)%></td>
+				<td width="400" height="30"><%=schedule_array[index_number].substring(11)%></td>
 
 			</tr>
 			<tr>
@@ -98,7 +96,11 @@ div.dispSchedule {
 
 
 
+
 		</table>
+
+		<a href="/CalendarJsp/scheduleEdit.jsp?TOTALETIME=<%= totale_time %>&INDEXNO=<%= index_number%>">編集へ</a> 
+		<a href="/CalendarJsp/scheduleDelete">削除へ</a>
 
 
 

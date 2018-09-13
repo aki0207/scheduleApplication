@@ -33,6 +33,9 @@ div.inputForm {
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
+		//パラメータ取得
+		String totale_time = request.getParameter("TOTALETIME");
+		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
 	%>
 
 
@@ -45,8 +48,8 @@ div.inputForm {
 	スケジュール詳細ページ&nbsp;
 	<br>
 
-	<a
-		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
+	
+		<a href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0)%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -223,21 +226,23 @@ div.inputForm {
 
 				<tr>
 					<td nowrap>予定</td>
-					<td><input type="text" name="PLAN" value="" size="30"
+					<td><input type="text" name="PLAN"
+						value="<%=schedule_array[index_number].substring(11)%>" size="30"
 						maxlength="100" required></td>
 				</tr>
 
 
 				<tr>
 					<td valign="top" nowrap>メモ</td>
-					<td><textarea name="MEMO" cols="30" rows="10" wrap="virtual" required></textarea></td>
+					<td><textarea name="MEMO" cols="30" rows="10" wrap="virtual"
+							required><%=schedule_memo_array[index_number]%></textarea></td>
 				</tr>
 			</table>
 
 
 
 			<p>
-				<input type="submit" value="登録する"> <input type="reset"
+				<input type="submit" value="変更する"> <input type="reset"
 					value="入力し直す">
 			<p>
 		</form>
