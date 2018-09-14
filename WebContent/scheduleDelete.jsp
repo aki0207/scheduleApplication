@@ -6,11 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-div.dispSchedule {
-	position: absolute;
-	top: 10px;
-	right: 500px;
-}
+
+
 </style>
 </head>
 <body>
@@ -43,34 +40,10 @@ div.dispSchedule {
 	%>
 
 
-	スケジュール詳細ページ&nbsp;
+	スケジュール削除確認ページ&nbsp;
 	<a
 		href="/CalendarJsp/scheduleIndex.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
-	<table border="1">
-		<tr>
-			<td>時刻</td>
-			<td>予定</td>
-		</tr>
-
-		<!-- 0時から23時までを表示 -->
-		<%
-			for (int i = 0; i < 24; i++) {
-		%>
-		<tr>
-			<td><%=i%>:00</td>
-			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0)%>"><%=schedule_array[i]%></a></td>
-		</tr>
-
-
-
-
-
-		<%
-			}
-		%>
-
-	</table>
+	
 
 	<!--スケジュールの詳細表示部分-->
 	<div class="dispSchedule">
@@ -96,7 +69,7 @@ div.dispSchedule {
 			</tr>
 			<tr>
 				<td>メモ</td>
-				<td width="400" height="30"><%=schedule_memo_array[index_number]%></td>
+				<td width="400" height="30" ><%=schedule_memo_array[index_number]%></td>
 
 			</tr>
 
@@ -105,9 +78,12 @@ div.dispSchedule {
 
 		</table>
 
-		<a href="/CalendarJsp/scheduleEdit.jsp?TOTALETIME=<%= totale_time %>&INDEXNO=<%= index_number%>">編集へ</a> 
-		<a href="/CalendarJsp/scheduleDelete.jsp?TOTALETIME=<%= totale_time %>&INDEXNO=<%= index_number%>">削除へ</a>
-
+		スケジュールを削除します。一度削除すると元には戻せません。<br>
+		削除しますか?,<br>
+		
+		<a href="/CalendarJsp/ScheduleDelete?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=  totale_time%>">削除する</a>
+		<a href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%= totale_time%>&INDEXNO=<%=index_number%>">キャンセルして詳細に戻る</a>
+		
 
 
 	</div>

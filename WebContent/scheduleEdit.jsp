@@ -231,7 +231,7 @@ div.inputForm {
 					<td nowrap>予定</td>
 					<td><input type="text" name="PLAN"
 						value="<%=schedule_array[index_number].substring(11)%>" size="30"
-						maxlength="100" required></td>
+						maxlength="255" required></td>
 				</tr>
 
 
