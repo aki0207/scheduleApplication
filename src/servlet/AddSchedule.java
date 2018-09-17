@@ -30,6 +30,7 @@ public class AddSchedule extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		//パラメータ格納用
 		String year;
 		String month;
 		String day;
@@ -70,13 +71,15 @@ public class AddSchedule extends HttpServlet {
 			response.sendRedirect("/CalendarJsp/Calendar.jsp");
 		}
 
-		
+		//sqlのクエリー達
 		String date_format;
 		String date_query;
 		String start_time_query;
 		String end_time_query;
+		//また考える
+		int id = 1;
 		
-		// 0埋め
+		//0埋めで整形
 		month = String.format("%02d", Integer.parseInt(month));
 		day = String.format("%02d", Integer.parseInt(day));
 		shour = String.format("%02d", Integer.parseInt(shour));
@@ -86,45 +89,47 @@ public class AddSchedule extends HttpServlet {
 		
 
 		// insert文のwhere旬に代入する値を準備
-		// sql実行のためにフォーマットを整る
-		date_format = "'" + year + "-" + month + "-" + day  ;
-		date_query = date_format + " 00:00:00'";
-		start_time_query =date_format + " " + shour + ":" + sminute + ":00'";
-		end_time_query = date_format + " " + ehour + ":" + eminute + ":00'";
-		// 日付が指定されていない場合開始時間及び終了時間をnullで登録
+		// sql実行のために整形
+		date_format = year + "-" + month + "-" + day  ;
+		date_query = date_format + " 00:00:00";
+		start_time_query =date_format + " " + shour + ":" + sminute + ":00";
+		end_time_query = date_format + " " + ehour + ":" + eminute + ":00";
 		
-	
-
+		
+		// 日付が指定されていない場合開始時間及び終了時間をnullで登録
 		if (shour.equals("") || sminute.equals("") || eminute.equals("") || ehour.equals("")) {
+			
 			start_time_query = null;
 			end_time_query = null;
 
 		}
 		
 
+		
 		response.setContentType("text/html; charset=UTF-8");
-
 		Connection conn = null;
 
 		try {
-			// JDBCドライバを読み込み
+			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-
-			// データベースへ接続
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
 			// insert文を準備
-			String sql = "insert  into schedule (id, scheduledate, starttime, endtime, schedule, schedulememo) values ( 1," + "to_date(" +date_query + ",'YYYY-MM-DD HH24:MI:SS')," + "to_date(" + start_time_query + ",'YYYY-MM-DD HH24:MI:SS'),"  + "to_date(" + end_time_query + ",'YYYY-MM-DD HH24:MI:SS'),'" + plan + "'," + "'" +memo + "')"; 
-			
-			System.out.println("実行するsqlはこれだ!" + sql);
-			PreparedStatement pstmt = conn.prepareStatement(sql);
+			String sql = "insert  into schedule (id, scheduledate, starttime, endtime, schedule, schedulememo) values ( ?,to_date( ?,'YYYY-MM-DD HH24:MI:SS'), to_date(?,'YYYY-MM-DD HH24:MI:SS'),to_date(?,'YYYY-MM-DD HH24:MI:SS'),? ,?)"; 
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
+			stmt.setString(2, date_query);
+			stmt.setString(3, start_time_query);
+			stmt.setString(4, end_time_query);
+			stmt.setString(5, plan);
+			stmt.setString(6, memo);
 			
 
 			
 			// 実行
-			int num = pstmt.executeUpdate();
+			int num = stmt.executeUpdate();
 
-			pstmt.close();
+			stmt.close();
 
 		} catch (ClassNotFoundException e) {
 

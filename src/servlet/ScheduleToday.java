@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.ScheduledExecutorService;
 
 import javax.servlet.RequestDispatcher;
@@ -32,21 +33,54 @@ public class ScheduleToday extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		Month month = new Month();
+		Calendar theDay = Calendar.getInstance();
 
 		// パラメータ取得
-		String year_now = request.getParameter("YEAR");
-		String month_now = request.getParameter("MONTH");
-		String day_now = request.getParameter("DAY");
+		String year_parameter = request.getParameter("YEAR");
+		String month_parameter = request.getParameter("MONTH");
+		String day_parameter = request.getParameter("DAY");
 
-		// 0埋め
-		String month_shaping = String.format("%02d", Integer.parseInt(month_now));
-		String day_shaping = String.format("%02d", Integer.parseInt(day_now));
+		// パラメータ確認。
+		int year_shaping_before = month.intParameterCheck(year_parameter);
+		int month_shaping_before = month.intParameterCheck(month_parameter);
+		//int day_shaping_before = month.intParameterCheck(day_parameter);
+
+		if (year_shaping_before == -999 || month_shaping_before== -999 ) {
+
+			//不正な値なら今月の日付けをセット
+			year_shaping_before = month.cal.get(Calendar.YEAR);
+			month_shaping_before = month.cal.get(Calendar.MONTH) + 1;
+
+		}
+		
+		
+		int day_shaping_before = month.dayParameterCheck(year_shaping_before, month_shaping_before, day_parameter);
+		
+		if (day_shaping_before == - 999) {
+			
+			//不正な値なら今月の値をセット
+			month_shaping_before = month.cal.get(Calendar.MONTH) + 1;
+			day_shaping_before = month.cal.get(Calendar.DATE);
+			
+		}
+		
+		
+		//確認後、ようやく年月日の変数登場
+		String year_now = String.valueOf(year_shaping_before);
+		String month_now = String.valueOf(month_shaping_before);
+		String day_now = String.valueOf(day_shaping_before);
+
+		//0埋めで整形
+		String month_shaping_after = String.format("%02d", Integer.parseInt(month_now));
+		String day_shaping_after = String.format("%02d", Integer.parseInt(day_now));
 
 		// where旬でつかう
-		String specified_day = year_now + "-" + month_shaping + "-" + day_shaping + " 00:00:00";
+		String specified_day = year_now + "-" + month_shaping_after + "-" + day_shaping_after + " 00:00:00";
 		// ログイン機能をつけた時に考える
 		int id = 1;
 
+		// 1日は24時間なんで
 		String[] schedule_array = new String[24];
 		String[] schedule_memo_array = new String[24];
 
@@ -58,22 +92,17 @@ public class ScheduleToday extends HttpServlet {
 		}
 
 		response.setContentType("text/html; charset=UTF-8");
-
 		Connection conn = null;
 
 		try {
-			// JDBCドライバを読み込み
+
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-
-			// データベースへ接続
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
-
-		
 
 			PreparedStatement stmt = conn.prepareStatement(
 					"SELECT * FROM schedule WHERE ID = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS')");
-			System.out.println(specified_day);
-			//sql文の値をセット
+
+			// sql文の値をセット
 			stmt.setInt(1, 1);
 			stmt.setString(2, specified_day);
 			// selectを実行し、結果票を取得
@@ -86,26 +115,25 @@ public class ScheduleToday extends HttpServlet {
 				String end_time = rs.getString("ENDTIME");
 				String schedule = rs.getString("SCHEDULE");
 				String schedule_memo = rs.getString("SCHEDULEMEMO");
-				
-				
-				//0から23の数字と比較したいから時分秒の時分を抜き出し
+
+				// 0から23の数字と比較したいから時分秒の時分を抜き出し
 				String start_time_time = start_time.substring(11, 13);
 				String start_time_minute = start_time.substring(14, 16);
 				String end_time_time = end_time.substring(11, 13);
 				String end_time_minute = end_time.substring(14, 16);
-				//スケジュール欄に表示させる時間
+
+				// スケジュール欄に表示させる時間
 				String totale_time = start_time_time + ":" + start_time_minute + "-" + end_time_time + ":"
 						+ end_time_minute + " ";
-				
-				
 
+				// 配列に予定とメモをいれる
 				for (int i = 0; i < 24; i++) {
 
 					String character_conversion = Integer.toString(i);
 					String time_schedule = String.format("%02d", Integer.parseInt(character_conversion));
 
 					if (start_time_time.equals(time_schedule)) {
-						
+
 						schedule_array[i] = totale_time + schedule;
 						schedule_memo_array[i] = schedule_memo;
 
@@ -144,6 +172,7 @@ public class ScheduleToday extends HttpServlet {
 
 		}
 
+		// セッションにセット
 		HttpSession session = request.getSession();
 		session.setAttribute("YEAR", year_now);
 		session.setAttribute("MONTH", month_now);

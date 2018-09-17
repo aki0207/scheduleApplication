@@ -25,14 +25,16 @@ div.inputForm {
 		session.setAttribute("DAY", session.getAttribute("DAY"));
 		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
-		//パラメータで送る用
-		String totale_time = "";
+
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
+
+		//パラメータで送る用
+		String totale_time = "";
 	%>
 
 
@@ -42,8 +44,9 @@ div.inputForm {
 
 
 
-	スケジュール詳細ページ&nbsp;
+	スケジュール一覧ページ
 	<br>
+
 
 	<a
 		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
@@ -91,8 +94,7 @@ div.inputForm {
 
 	</table>
 
-	<!--セレクトボックスを作っていく
-		まずは年度から			-->
+	<!--セレクトボックスを作っていく-->
 
 	<div class="inputForm">
 
@@ -134,7 +136,7 @@ div.inputForm {
 								if (j == month_now) {
 							%>
 
-							<option value=<%=j%> selected><%=j%>日
+							<option value=<%=j%> selected><%=j%>月
 
 								<%
 								}
@@ -230,7 +232,8 @@ div.inputForm {
 
 				<tr>
 					<td valign="top" nowrap>メモ</td>
-					<td><textarea name="MEMO" cols="30" rows="10" wrap="virtual" required></textarea></td>
+					<td><textarea name="MEMO" cols="30" rows="10" wrap="virtual"
+							required></textarea></td>
 				</tr>
 			</table>
 
