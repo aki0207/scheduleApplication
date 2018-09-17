@@ -197,4 +197,34 @@ public class Month {
 
 		return totale_time_parameter;
 	}
+
+	public String indexNumberParameterCheck(String index_number_parameter) {
+
+		if (index_number_parameter == null || index_number_parameter.length() == 0) {
+
+			index_number_parameter = "";
+
+		} else {
+
+			try {
+
+				// 変換に失敗すれば数字じゃない
+				return_int_value = Integer.parseInt(index_number_parameter);
+
+				// 配列の大きさは24
+				if (return_int_value < 0 || return_int_value > 23) {
+
+					index_number_parameter = "";
+
+				}
+
+			} catch (NumberFormatException e) {
+
+				index_number_parameter = "";
+
+			}
+		}
+		
+		return index_number_parameter;
+	}
 }

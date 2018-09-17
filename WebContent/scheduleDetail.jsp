@@ -36,19 +36,22 @@ div.dispSchedule {
 
 		//パラメータを取得
 		String totale_time = request.getParameter("TOTALETIME");
-		System.out.println("取得しただんかいでは," + totale_time);
-		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
+		String index_number_conversion_before = request.getParameter("INDEXNO");
+		//int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
 
 		//不正な値チェック
 		Month month = new Month();
 		totale_time = month.totaleTimeParameterCheck(totale_time);
+		index_number_conversion_before = month.indexNumberParameterCheck(index_number_conversion_before);
 
-		if (totale_time.equals("")) {
+		if (totale_time.equals("") || index_number_conversion_before.equals("")) {
 
 			// ユーザーのスケジュール表示画面へフォワード
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
 			dispatcher.forward(request, response);
 		}
+		
+		int index_number = Integer.parseInt(index_number_conversion_before);
 	%>
 
 
@@ -68,12 +71,16 @@ div.dispSchedule {
 		<tr>
 			<td><%=i%>:00</td>
 			<td width="800" height="30">
-			<% if (schedule_array[i].length() != 0) { %>
-			<a
-				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0,11)%>"><%=schedule_array[i]%></a></td>
+				<%
+					if (schedule_array[i].length() != 0) {
+				%> <a
+				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0, 11)%>"><%=schedule_array[i]%></a>
+			</td>
 		</tr>
-		
-			<% }  %>
+
+		<%
+			}
+		%>
 
 
 
@@ -104,7 +111,23 @@ div.dispSchedule {
 			</tr>
 			<tr>
 				<td>スケジュール</td>
-				<td width="400" height="30"><%=schedule_array[index_number].substring(11)%></td>
+				<td width="400" height="30">
+					<%
+						//スケジュールに値が入ってるときだけ表示
+						if (schedule_array[index_number].length() != 0) {
+					%> <%=schedule_array[index_number].substring(11)%></td>
+
+				<%
+					} else {
+				%>
+
+				<%
+					// 存在しないindexnumberを指定された場合、トップページへ
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+						dispatcher.forward(request, response);
+
+					}
+				%>
 
 			</tr>
 			<tr>
