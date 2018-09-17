@@ -20,8 +20,8 @@
 		String year_parameter = request.getParameter("YEAR");
 		String month_parameter = request.getParameter("MONTH");
 
-		int year_now = month.intParameterCheck(year_parameter);
-		int month_now = month.intParameterCheck(month_parameter);
+		int year_now = month.yearParameterCheck(year_parameter);
+		int month_now = month.monthParameterCheck(month_parameter);
 
 		if (year_now == -999 || month_now == -999) {
 

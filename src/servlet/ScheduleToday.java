@@ -42,8 +42,8 @@ public class ScheduleToday extends HttpServlet {
 		String day_parameter = request.getParameter("DAY");
 
 		// パラメータ確認。
-		int year_shaping_before = month.intParameterCheck(year_parameter);
-		int month_shaping_before = month.intParameterCheck(month_parameter);
+		int year_shaping_before = month.yearParameterCheck(year_parameter);
+		int month_shaping_before = month.monthParameterCheck(month_parameter);
 		//int day_shaping_before = month.intParameterCheck(day_parameter);
 
 		if (year_shaping_before == -999 || month_shaping_before== -999 ) {
@@ -60,6 +60,7 @@ public class ScheduleToday extends HttpServlet {
 		if (day_shaping_before == - 999) {
 			
 			//不正な値なら今月の値をセット
+			year_shaping_before = month.cal.get(Calendar.YEAR);
 			month_shaping_before = month.cal.get(Calendar.MONTH) + 1;
 			day_shaping_before = month.cal.get(Calendar.DATE);
 			
@@ -118,6 +119,7 @@ public class ScheduleToday extends HttpServlet {
 
 				// 0から23の数字と比較したいから時分秒の時分を抜き出し
 				String start_time_time = start_time.substring(11, 13);
+				System.out.println("時間抜き出すときこーなってる:" + start_time_time);
 				String start_time_minute = start_time.substring(14, 16);
 				String end_time_time = end_time.substring(11, 13);
 				String end_time_minute = end_time.substring(14, 16);
