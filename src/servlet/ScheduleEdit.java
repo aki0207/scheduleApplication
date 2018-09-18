@@ -119,32 +119,53 @@ public class ScheduleEdit extends HttpServlet {
 			// データベースへ接続
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
-			// update文を準備
-			String sql = "update schedule set scheduledate = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end, starttime = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end,endtime = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end, schedule = case id when ? then ? END, schedulememo = case id when ? then ? end where  id = ? and starttime = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
-			
-			// ?にセット
+			// select文で時間に重複がないか調べる
+			//条件としては、登録先の時間かぶりは許さないが、更新前の時間への重複は許す
+			String sql = "select schedule from schedule where id = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS') and starttime not in (to_date(?,'YYYY-MM-DD HH24:MI:SS')) and (starttime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS') or endtime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS')) ";
 			PreparedStatement stmt = conn.prepareStatement(sql);
+
+			// sql文の値をセット
 			stmt.setInt(1, edit_id);
 			stmt.setString(2, date_query);
-			stmt.setInt(3, edit_id);
+			System.out.println(date_query);
+			stmt.setString(3, start_time_query);
+			System.out.println("はじまりは" + start_time_query);
 			stmt.setString(4, start_time_query);
-			stmt.setInt(5, edit_id);
-			stmt.setString(6, end_time_query);
-			stmt.setInt(7, edit_id);
-			stmt.setString(8, plan);
-			stmt.setInt(9, edit_id);
-			stmt.setString(10, memo);
-			stmt.setInt(11, edit_id);
-			stmt.setString(12, edit_target_search_query);
-			
-			
-		
-			
+			stmt.setString(5, end_time_query);
+			System.out.println(end_time_query);
+			stmt.setString(6, start_time_query);
+			stmt.setString(7, end_time_query);
 
-			// UPDATE文を実行する
-			int num = stmt.executeUpdate();
+			// selectを実行し、結果票を取得
+			System.out.println("実行するよん");
+			;
+			ResultSet rs = stmt.executeQuery();
 
-			stmt.close();
+			// 検索結果が存在しない場合のみ追加を行う
+			if (!(rs.isBeforeFirst())) {
+
+				// update文を準備
+				sql = "update schedule set scheduledate = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end, starttime = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end,endtime = case id when ? then to_date(?,'YYYY-MM-DD HH24:MI:SS') end, schedule = case id when ? then ? END, schedulememo = case id when ? then ? end where  id = ? and starttime = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
+
+				// ?にセット
+				stmt = conn.prepareStatement(sql);
+				stmt.setInt(1, edit_id);
+				stmt.setString(2, date_query);
+				stmt.setInt(3, edit_id);
+				stmt.setString(4, start_time_query);
+				stmt.setInt(5, edit_id);
+				stmt.setString(6, end_time_query);
+				stmt.setInt(7, edit_id);
+				stmt.setString(8, plan);
+				stmt.setInt(9, edit_id);
+				stmt.setString(10, memo);
+				stmt.setInt(11, edit_id);
+				stmt.setString(12, edit_target_search_query);
+
+				// UPDATE文を実行する
+				int num = stmt.executeUpdate();
+				stmt.close();
+			}
 
 		} catch (ClassNotFoundException e) {
 
@@ -175,8 +196,6 @@ public class ScheduleEdit extends HttpServlet {
 
 		}
 
-		// ただmonthから1ひきたかっただけなんだ…
-		// int month_numeric_value = Integer.parseInt(month) - 1;
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("/CalendarJsp/Calendar.jsp");
