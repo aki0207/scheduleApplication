@@ -37,7 +37,6 @@ div.dispSchedule {
 		//パラメータを取得
 		String totale_time = request.getParameter("TOTALETIME");
 		String index_number_conversion_before = request.getParameter("INDEXNO");
-		//int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
 
 		//不正な値チェック
 		Month month = new Month();

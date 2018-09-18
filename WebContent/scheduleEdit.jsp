@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="model.Month"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -32,16 +33,27 @@ div.inputForm {
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
-		
-		//パラメータ取得
+
+		//パラメータを取得
 		String totale_time = request.getParameter("TOTALETIME");
-		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
-		
-		
-		
+		String index_number_conversion_before = request.getParameter("INDEXNO");
+
+		//不正な値チェック
+		Month month = new Month();
+		totale_time = month.totaleTimeParameterCheck(totale_time);
+		index_number_conversion_before = month.indexNumberParameterCheck(index_number_conversion_before);
+
+		if (totale_time.equals("") || index_number_conversion_before.equals("")) {
+
+			// ユーザーのスケジュール表示画面へフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+			dispatcher.forward(request, response);
+		}
+
+		int index_number = Integer.parseInt(index_number_conversion_before);
 	%>
 
-	
+
 
 
 
@@ -52,7 +64,7 @@ div.inputForm {
 
 
 	<a
-		href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0)%>">戻る</a>
+		href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0, 11)%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -71,7 +83,7 @@ div.inputForm {
 						totale_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME= <%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME=<%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
 
 
 
@@ -102,7 +114,9 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form action="/CalendarJsp/ScheduleEdit?TOTALETIME=<%= totale_time %>&INDEXNO=<%=index_number%>" method="post">
+		<form
+			action="/CalendarJsp/ScheduleEdit?TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>"
+			method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>
@@ -229,6 +243,15 @@ div.inputForm {
 
 				<tr>
 					<td nowrap>予定</td>
+					<%
+						//存在しないindex_numberを入力されたときはトップページへ
+						if (schedule_array[index_number].length() == 0) {
+							
+							RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+							dispatcher.forward(request, response);
+
+						}
+					%>
 					<td><input type="text" name="PLAN"
 						value="<%=schedule_array[index_number].substring(11)%>" size="30"
 						maxlength="255" required></td>
