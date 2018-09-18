@@ -110,20 +110,48 @@ public class AddSchedule extends HttpServlet {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
-			// insert文を準備
-			String sql = "insert  into schedule (id, scheduledate, starttime, endtime, schedule, schedulememo) values ( ?,to_date( ?,'YYYY-MM-DD HH24:MI:SS'), to_date(?,'YYYY-MM-DD HH24:MI:SS'),to_date(?,'YYYY-MM-DD HH24:MI:SS'),? ,?)";
+			// select文で時間に重複がないか調べる
+			String sql = "select schedule from schedule where id = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS') and (starttime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS') or endtime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS'))";
 			PreparedStatement stmt = conn.prepareStatement(sql);
+
+			// sql文の値をセット
 			stmt.setInt(1, id);
 			stmt.setString(2, date_query);
+			System.out.println(date_query);
 			stmt.setString(3, start_time_query);
+			System.out.println(start_time_query);
 			stmt.setString(4, end_time_query);
-			stmt.setString(5, plan);
-			stmt.setString(6, memo);
+			System.out.println(end_time_query);
+			stmt.setString(5, start_time_query);
+			stmt.setString(6, end_time_query);
 
-			// 実行
-			int num = stmt.executeUpdate();
+			// selectを実行し、結果票を取得
+			System.out.println("実行するよん");;
+			ResultSet rs = stmt.executeQuery();
 
-			stmt.close();
+			// 検索結果が存在しない場合のみ追加を行う
+			if (!(rs.isBeforeFirst())) {
+				
+				System.out.println("ここにはきてる");
+
+				// insert文を準備
+				sql = "insert  into schedule (id, scheduledate, starttime, endtime, schedule, schedulememo) values ( ?,to_date( ?,'YYYY-MM-DD HH24:MI:SS'), to_date(?,'YYYY-MM-DD HH24:MI:SS'),to_date(?,'YYYY-MM-DD HH24:MI:SS'),? ,?)";
+				stmt = conn.prepareStatement(sql);
+
+				// sql文の値をセット
+				stmt.setInt(1, id);
+				stmt.setString(2, date_query);
+				stmt.setString(3, start_time_query);
+				stmt.setString(4, end_time_query);
+				stmt.setString(5, plan);
+				stmt.setString(6, memo);
+
+				// 実行
+				int num = stmt.executeUpdate();
+
+				stmt.close();
+
+			}
 
 		} catch (ClassNotFoundException e) {
 

@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="model.Month"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-
-
 </style>
 </head>
 <body>
@@ -22,28 +21,38 @@
 		session.setAttribute("DAY", session.getAttribute("DAY"));
 		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
-		
-		
-		
+
 		//セッションから値を取得
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
-		
-		
-		
+
 		//パラメータを取得
 		String totale_time = request.getParameter("TOTALETIME");
-		int index_number = Integer.parseInt(request.getParameter("INDEXNO"));
+		String index_number_conversion_before = request.getParameter("INDEXNO");
+
+		//不正な値チェック
+		Month month = new Month();
+		totale_time = month.totaleTimeParameterCheck(totale_time);
+		index_number_conversion_before = month.indexNumberParameterCheck(index_number_conversion_before);
+
+		if (totale_time.equals("") || index_number_conversion_before.equals("")) {
+
+			// ユーザーのスケジュール表示画面へフォワード
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+			dispatcher.forward(request, response);
+		}
+
+		int index_number = Integer.parseInt(index_number_conversion_before);
 	%>
 
 
 	スケジュール削除確認ページ&nbsp;
 	<a
 		href="/CalendarJsp/scheduleIndex.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
-	
+
 
 	<!--スケジュールの詳細表示部分-->
 	<div class="dispSchedule">
@@ -64,12 +73,21 @@
 			</tr>
 			<tr>
 				<td>スケジュール</td>
+				<%
+					if (schedule_array[index_number].length() == 0) {
+
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+						dispatcher.forward(request, response);
+
+					}
+				%>
+
 				<td width="400" height="30"><%=schedule_array[index_number].substring(11)%></td>
 
 			</tr>
 			<tr>
 				<td>メモ</td>
-				<td width="400" height="30" ><%=schedule_memo_array[index_number]%></td>
+				<td width="400" height="30"><%=schedule_memo_array[index_number]%></td>
 
 			</tr>
 
@@ -78,12 +96,11 @@
 
 		</table>
 
-		スケジュールを削除します。一度削除すると元には戻せません。<br>
-		削除しますか?,<br>
-		
-		<a href="/CalendarJsp/ScheduleDelete?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=  totale_time%>">削除する</a>
-		<a href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%= totale_time%>&INDEXNO=<%=index_number%>">キャンセルして詳細に戻る</a>
-		
+		スケジュールを削除します。一度削除すると元には戻せません。<br> 削除しますか?,<br> <a
+			href="/CalendarJsp/ScheduleDelete?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=totale_time%>">削除する</a>
+		<a
+			href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">キャンセルして詳細に戻る</a>
+
 
 
 	</div>

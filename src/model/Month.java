@@ -137,7 +137,6 @@ public class Month {
 				theDay.set(year_parameter, month_parameter - 1, 1);
 				int end_of_month_day;
 				end_of_month_day = theDay.getActualMaximum(Calendar.DATE);
-				System.out.println("月末は" + end_of_month_day);
 
 				// 0日以下or月末日越えてたらおかしい
 				if (return_int_value < 1 || return_int_value > end_of_month_day) {
@@ -224,7 +223,7 @@ public class Month {
 
 			}
 		}
-		
+
 		return index_number_parameter;
 	}
 }

@@ -100,8 +100,8 @@ public class ScheduleToday extends HttpServlet {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
-			PreparedStatement stmt = conn.prepareStatement(
-					"SELECT * FROM schedule WHERE ID = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS')");
+			String sql = "SELECT * FROM schedule WHERE ID = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
+			PreparedStatement stmt = conn.prepareStatement(sql);
 
 			// sql文の値をセット
 			stmt.setInt(1, 1);
@@ -119,7 +119,6 @@ public class ScheduleToday extends HttpServlet {
 
 				// 0から23の数字と比較したいから時分秒の時分を抜き出し
 				String start_time_time = start_time.substring(11, 13);
-				System.out.println("時間抜き出すときこーなってる:" + start_time_time);
 				String start_time_minute = start_time.substring(14, 16);
 				String end_time_time = end_time.substring(11, 13);
 				String end_time_minute = end_time.substring(14, 16);
