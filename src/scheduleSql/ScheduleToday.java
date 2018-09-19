@@ -1,4 +1,4 @@
-package servlet;
+package scheduleSql;
 
 import java.io.IOException;
 import java.sql.Connection;
