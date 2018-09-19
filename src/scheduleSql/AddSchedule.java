@@ -30,6 +30,18 @@ public class AddSchedule extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("LOGINUSER");
+		
+		//ログインしてるか確認
+		if (user == null) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+		
+		
 		// パラメータ格納用
 		String year;
 		String month;
@@ -72,12 +84,12 @@ public class AddSchedule extends HttpServlet {
 		}
 
 		// sqlのクエリー達
+		int id = Integer.parseInt(user.getId());
 		String date_format;
 		String date_query;
 		String start_time_query;
 		String end_time_query;
-		// また考える
-		int id = 1;
+		
 
 		// 0埋めで整形
 		month = String.format("%02d", Integer.parseInt(month));
@@ -95,12 +107,12 @@ public class AddSchedule extends HttpServlet {
 		end_time_query = date_format + " " + ehour + ":" + eminute + ":00";
 
 		// 日付が指定されていない場合開始時間及び終了時間をnullで登録
-		if (shour.equals("") || sminute.equals("") || eminute.equals("") || ehour.equals("")) {
+/*		if (shour.equals("") || sminute.equals("") || eminute.equals("") || ehour.equals("")) {
 
 			start_time_query = null;
 			end_time_query = null;
 
-		}
+		}*/
 
 		response.setContentType("text/html; charset=UTF-8");
 		Connection conn = null;
@@ -188,6 +200,8 @@ public class AddSchedule extends HttpServlet {
 		sb.append(year);
 		sb.append("&MONTH=");
 		sb.append(month);
+		sb.append("&ID=");
+		sb.append(id);
 		response.sendRedirect(new String(sb));
 
 	}

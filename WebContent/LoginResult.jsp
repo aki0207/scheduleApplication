@@ -3,7 +3,7 @@
 <%@ page import="model.User"%>
 <%
 	//セッションスコープからユーザー情報を取得
-	User login_user = (User) session.getAttribute("loginUser");
+	User login_user = (User) session.getAttribute("LOGINUSER");
 %>
 <!DOCTYPE html>
 <html>
@@ -22,7 +22,10 @@
 		ようこそ-<%=login_user.getName()%>さん
 	</p>
 	<%
-		//セッションスコープの情報を破棄
+		// セッションにuser情報を保存
+			session.setAttribute("LOGINUSER", login_user);
+
+			//セッションスコープの情報を破棄(テスト用)
 			//session = request.getSession();
 			//session.invalidate();
 	%>

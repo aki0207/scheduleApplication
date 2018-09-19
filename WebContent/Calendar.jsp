@@ -1,7 +1,8 @@
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="model.Month"%>
+<%@ page import="model.*"%>
+
 
 <html>
 <head>
@@ -14,25 +15,45 @@
 
 	<%
 		Month month = new Month();
+		User user = (User) session.getAttribute("LOGINUSER");
 
-		// パラメータ確認。値がない、不正な場合-999をセット
-
+		//パラメータ確認
 		String year_parameter = request.getParameter("YEAR");
 		String month_parameter = request.getParameter("MONTH");
+		String id_parameter = request.getParameter("ID");
 
+		//値がない、不正な場合-999をセット
 		int year_now = month.yearParameterCheck(year_parameter);
 		int month_now = month.monthParameterCheck(month_parameter);
+		int id_now = month.idParameterCheck(id_parameter);
 
+		//セッションにuser情報がないか、idが不正な値ならログインページへ
+		if (user == null || id_now == -999) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+
+		//ログインしているか確認
+		user.login_status = user.loginUser(id_now, user);
+
+		if (user.login_status == false) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+
+		//不正な値なら現在の年、月をセット
 		if (year_now == -999 || month_now == -999) {
 
-			//現在の年、月をセット
 			year_now = month.cal.get(Calendar.YEAR);
 			month_now = month.cal.get(Calendar.MONTH) + 1;
 
 		}
 
 		//12月の次は1月かつ次年度
-
 		if (month_now > 12) {
 
 			month_now = 1;
@@ -41,7 +62,6 @@
 		}
 
 		//逆もまた然り
-
 		if (month_now < 1) {
 
 			month_now = 12;
@@ -110,7 +130,7 @@
 
 
 			<td><a
-				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>"><%=i%></a></td>
+				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
 
 
 			<%
@@ -138,14 +158,12 @@
 
 		<!-- 当月の最終日が土曜日じゃない時、土曜日まで余白を埋める -->
 		<%
-			
 			if (month.cal.get(month.cal.DAY_OF_WEEK) < 7) {
 		%>
 
 		<td>
 			<%
 				for (int count = month.cal.get(month.cal.DAY_OF_WEEK); count < 6; count++) {
-
 			%>
 		
 		<td>&nbsp;</td>

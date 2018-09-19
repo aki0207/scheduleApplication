@@ -16,26 +16,28 @@ public class Month {
 	public String return_string_value;
 
 	// パラメータの確認int型ver
-	public int intParameterCheck(String parameter) {
+	public int idParameterCheck(String id_parameter) {
+		
+		int return_id;
 
-		if (parameter == null || parameter.length() == 0) {
+		if (id_parameter == null || id_parameter.length() == 0) {
 
-			return_int_value = -999;
+			return_id = -999;
 
 		} else {
 
 			try {
 
-				return_int_value = Integer.parseInt(parameter);
+				return_id = Integer.parseInt(id_parameter);
 
 			} catch (NumberFormatException e) {
 
-				return_int_value = -999;
+				return_id = -999;
 
 			}
 		}
 
-		return return_int_value;
+		return return_id;
 	}
 
 	public String stringParameterCheck(String parameter) {

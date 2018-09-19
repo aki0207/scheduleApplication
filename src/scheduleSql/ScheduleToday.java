@@ -26,6 +26,7 @@ import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import model.Month;
+import model.User;
 
 @WebServlet("/ScheduleToday")
 public class ScheduleToday extends HttpServlet {
@@ -33,46 +34,65 @@ public class ScheduleToday extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		HttpSession session = request.getSession();
 		Month month = new Month();
+		User user = (User) session.getAttribute("LOGINUSER");
 		Calendar theDay = Calendar.getInstance();
 
 		// パラメータ取得
 		String year_parameter = request.getParameter("YEAR");
 		String month_parameter = request.getParameter("MONTH");
 		String day_parameter = request.getParameter("DAY");
+		String id_parameter = request.getParameter("ID");
 
 		// パラメータ確認。
 		int year_shaping_before = month.yearParameterCheck(year_parameter);
 		int month_shaping_before = month.monthParameterCheck(month_parameter);
-		//int day_shaping_before = month.intParameterCheck(day_parameter);
+		int id_now = month.idParameterCheck(id_parameter);
 
-		if (year_shaping_before == -999 || month_shaping_before== -999 ) {
+		// セッションにuser情報がないか、idが不正な値ならログインページへ
+		if (user == null || id_now == -999) {
 
-			//不正な値なら今月の日付けをセット
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+
+		// ログインしているか確認
+		user.login_status = user.loginUser(id_now, user);
+
+		if (user.login_status == false) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+
+		// 不正な値なら今月の日付けをセット
+		if (year_shaping_before == -999 || month_shaping_before == -999) {
+
 			year_shaping_before = month.cal.get(Calendar.YEAR);
 			month_shaping_before = month.cal.get(Calendar.MONTH) + 1;
 
 		}
-		
-		
+
 		int day_shaping_before = month.dayParameterCheck(year_shaping_before, month_shaping_before, day_parameter);
-		
-		if (day_shaping_before == - 999) {
-			
-			//不正な値なら今月の値をセット
+
+		// 不正な値なら今月の値をセット
+		if (day_shaping_before == -999) {
+
 			year_shaping_before = month.cal.get(Calendar.YEAR);
 			month_shaping_before = month.cal.get(Calendar.MONTH) + 1;
 			day_shaping_before = month.cal.get(Calendar.DATE);
-			
+
 		}
-		
-		
-		//確認後、ようやく年月日の変数登場
+
+		// 確認後、ようやく年月日の変数登場
 		String year_now = String.valueOf(year_shaping_before);
 		String month_now = String.valueOf(month_shaping_before);
 		String day_now = String.valueOf(day_shaping_before);
 
-		//0埋めで整形
+		// 0埋めで整形
 		String month_shaping_after = String.format("%02d", Integer.parseInt(month_now));
 		String day_shaping_after = String.format("%02d", Integer.parseInt(day_now));
 
@@ -104,7 +124,7 @@ public class ScheduleToday extends HttpServlet {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 
 			// sql文の値をセット
-			stmt.setInt(1, 1);
+			stmt.setInt(1, id_now);
 			stmt.setString(2, specified_day);
 			// selectを実行し、結果票を取得
 			ResultSet rs = stmt.executeQuery();
@@ -174,7 +194,7 @@ public class ScheduleToday extends HttpServlet {
 		}
 
 		// セッションにセット
-		HttpSession session = request.getSession();
+		session.setAttribute("LOGINUSER", user);
 		session.setAttribute("YEAR", year_now);
 		session.setAttribute("MONTH", month_now);
 		session.setAttribute("DAY", day_now);
@@ -182,8 +202,16 @@ public class ScheduleToday extends HttpServlet {
 		session.setAttribute("SCHEDULEMEMOARRAY", schedule_memo_array);
 
 		// ユーザーのスケジュール表示画面へフォワード
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/scheduleIndex.jsp");
-		dispatcher.forward(request, response);
+		//RequestDispatcher dispatcher = request.getRequestDispatcher("/scheduleIndex.jsp");
+		//dispatcher.forward(request, response);
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("/CalendarJsp/scheduleIndex.jsp");
+		sb.append("?ID=");
+		sb.append(id_now);
+		
+		response.sendRedirect(new String(sb));
+
 
 	}
 }

@@ -74,7 +74,7 @@ public class Login extends HttpServlet {
 						//ユーザー情報をセッションスコープに保存
 						login_user.setName(db_exist_name);
 						HttpSession session = request.getSession();
-						session.setAttribute("loginUser", login_user);
+						session.setAttribute("LOGINUSER", login_user);
 						break;
 
 					}

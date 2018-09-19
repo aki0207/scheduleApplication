@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="model.User"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -20,6 +21,7 @@ div.inputForm {
 
 	<%
 		//なんかjspからjspに移動するときセッションの値消えるらしいから再度セッションに保存
+		session.setAttribute("LOGINUSER", session.getAttribute("LOGINUSER"));
 		session.setAttribute("YEAR", session.getAttribute("YEAR"));
 		session.setAttribute("MONTH", session.getAttribute("MONTH"));
 		session.setAttribute("DAY", session.getAttribute("DAY"));
@@ -27,6 +29,7 @@ div.inputForm {
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
 
 		//セッションから値を取得
+		User user = (User) session.getAttribute("LOGINUSER");
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
