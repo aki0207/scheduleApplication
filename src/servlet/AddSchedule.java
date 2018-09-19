@@ -42,7 +42,7 @@ public class AddSchedule extends HttpServlet {
 		String memo;
 		String parameter;
 
-		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求む
+		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求
 		Month m = new Month();
 
 		// パラメータが不正な値じゃないかチェック×2
