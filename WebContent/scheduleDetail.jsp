@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="model.Month"%>
+<%@ page import="model.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -21,6 +21,7 @@ div.dispSchedule {
 
 	<%
 		//なんかjspからjspに移動するときセッションの値消えるらしいから再度セッションに保存
+		session.setAttribute("LOGINUSER", session.getAttribute("LOGINUSER"));
 		session.setAttribute("YEAR", session.getAttribute("YEAR"));
 		session.setAttribute("MONTH", session.getAttribute("MONTH"));
 		session.setAttribute("DAY", session.getAttribute("DAY"));
@@ -28,6 +29,7 @@ div.dispSchedule {
 		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
 
 		//セッションから値を取得
+		User user = (User) session.getAttribute("LOGINUSER");
 		int year_now = Integer.parseInt((String) session.getAttribute("YEAR"));
 		int month_now = Integer.parseInt((String) session.getAttribute("MONTH"));
 		int day_now = Integer.parseInt((String) session.getAttribute("DAY"));
@@ -35,6 +37,7 @@ div.dispSchedule {
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
 
 		//パラメータを取得
+		String id_parameter = request.getParameter("ID");
 		String totale_time = request.getParameter("TOTALETIME");
 		String index_number_conversion_before = request.getParameter("INDEXNO");
 
@@ -42,21 +45,32 @@ div.dispSchedule {
 		Month month = new Month();
 		totale_time = month.totaleTimeParameterCheck(totale_time);
 		index_number_conversion_before = month.indexNumberParameterCheck(index_number_conversion_before);
+		int id_now = month.idParameterCheck(id_parameter);
 
-		if (totale_time.equals("") || index_number_conversion_before.equals("")) {
+		if (totale_time.equals("") || index_number_conversion_before.equals("") || id_now == -999 || user == null) {
 
-			// ユーザーのスケジュール表示画面へフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 		}
-		
+
+		//ログインしているか確認
+		user.login_status = user.loginUser(id_now, user);
+
+		if (user.login_status == false) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+
 		int index_number = Integer.parseInt(index_number_conversion_before);
 	%>
 
 
 	スケジュール詳細ページ&nbsp;
 	<a
-		href="/CalendarJsp/scheduleIndex.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
+		href="/CalendarJsp/scheduleIndex.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -73,7 +87,7 @@ div.dispSchedule {
 				<%
 					if (schedule_array[i].length() != 0) {
 				%> <a
-				href="/CalendarJsp/scheduleDetail.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0, 11)%>"><%=schedule_array[i]%></a>
+				href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0, 11)%>"><%=schedule_array[i]%></a>
 			</td>
 		</tr>
 
@@ -141,9 +155,9 @@ div.dispSchedule {
 		</table>
 
 		<a
-			href="/CalendarJsp/scheduleEdit.jsp?TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">編集へ</a>
+			href="/CalendarJsp/scheduleEdit.jsp?ID=<%=id_now %>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">編集へ</a>
 		<a
-			href="/CalendarJsp/scheduleDelete.jsp?TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">削除へ</a>
+			href="/CalendarJsp/scheduleDelete.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">削除へ</a>
 
 
 

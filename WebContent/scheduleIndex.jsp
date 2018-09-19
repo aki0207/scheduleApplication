@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="model.User"%>
+<%@ page import="model.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -36,8 +36,32 @@ div.inputForm {
 		String[] schedule_array = ((String[]) session.getAttribute("SCHEDULEARRAY"));
 		String[] schedule_memo_array = ((String[]) session.getAttribute("SCHEDULEMEMOARRAY"));
 
+		//パラメータから取得
+		String id_parameter = request.getParameter("ID");
 		//パラメータで送る用
 		String totale_time = "";
+
+		//パラメータ確認。不正な値なら-999代入
+		Month month = new Month();
+		int id_now = month.idParameterCheck(id_parameter);
+
+		//セッションにuser情報がないか、idが不正な値ならログインページへ
+		if (user == null || id_now == -999) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
+
+		//ログインしているか確認
+		user.login_status = user.loginUser(id_now, user);
+
+		if (user.login_status == false) {
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			dispatcher.forward(request, response);
+
+		}
 	%>
 
 
@@ -71,7 +95,7 @@ div.inputForm {
 						totale_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?TOTALETIME=<%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
 
 
 

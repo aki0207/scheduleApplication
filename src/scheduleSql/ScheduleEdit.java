@@ -93,6 +93,7 @@ public class ScheduleEdit extends HttpServlet {
 
 		// セッション及びパラメータから値を持って来て、where旬で更新元のデータを指定するための値を用意
 		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("LOGINUSER");
 		String edit_target_year = (String) session.getAttribute("YEAR");
 		String edit_target_month = (String) session.getAttribute("MONTH");
 		String edit_target_day = (String) session.getAttribute("DAY");
@@ -106,7 +107,8 @@ public class ScheduleEdit extends HttpServlet {
 		// 整形して実際に流されるのものがこちら
 		String edit_target_search_query = edit_target_year + "-" + edit_target_month + "-" + edit_target_day + " "
 				+ edit_target_start_time;
-		int edit_id = 1;
+
+		int id_now = Integer.parseInt(user.getId());
 
 		response.setContentType("text/html; charset=UTF-8");
 
@@ -120,12 +122,12 @@ public class ScheduleEdit extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
 			// select文で時間に重複がないか調べる
-			//条件としては、登録先の時間かぶりは許さないが、更新前の時間への重複は許す
+			// 条件としては、登録先の時間かぶりは許さないが、更新前の時間への重複は許す
 			String sql = "select schedule from schedule where id = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS') and starttime not in (to_date(?,'YYYY-MM-DD HH24:MI:SS')) and (starttime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS') or endtime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS')) ";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 
 			// sql文の値をセット
-			stmt.setInt(1, edit_id);
+			stmt.setInt(1, id_now);
 			stmt.setString(2, date_query);
 			System.out.println(date_query);
 			stmt.setString(3, start_time_query);
@@ -149,17 +151,17 @@ public class ScheduleEdit extends HttpServlet {
 
 				// ?にセット
 				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, edit_id);
+				stmt.setInt(1, id_now);
 				stmt.setString(2, date_query);
-				stmt.setInt(3, edit_id);
+				stmt.setInt(3, id_now);
 				stmt.setString(4, start_time_query);
-				stmt.setInt(5, edit_id);
+				stmt.setInt(5, id_now);
 				stmt.setString(6, end_time_query);
-				stmt.setInt(7, edit_id);
+				stmt.setInt(7, id_now);
 				stmt.setString(8, plan);
-				stmt.setInt(9, edit_id);
+				stmt.setInt(9, id_now);
 				stmt.setString(10, memo);
-				stmt.setInt(11, edit_id);
+				stmt.setInt(11, id_now);
 				stmt.setString(12, edit_target_search_query);
 
 				// UPDATE文を実行する
@@ -196,13 +198,14 @@ public class ScheduleEdit extends HttpServlet {
 
 		}
 
-
 		StringBuffer sb = new StringBuffer();
 		sb.append("/CalendarJsp/Calendar.jsp");
 		sb.append("?YEAR=");
 		sb.append(year);
 		sb.append("&MONTH=");
 		sb.append(month);
+		sb.append("&ID=");
+		sb.append(id_now);
 		response.sendRedirect(new String(sb));
 	}
 }
