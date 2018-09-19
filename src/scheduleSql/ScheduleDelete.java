@@ -33,22 +33,16 @@ public class ScheduleDelete extends HttpServlet {
 
 		HttpSession session = request.getSession();
 
-		// なんか移動するときセッションの値消えるらしいから再度セッションに保存
-		session.setAttribute("YEAR", session.getAttribute("YEAR"));
-		session.setAttribute("MONTH", session.getAttribute("MONTH"));
-		session.setAttribute("DAY", session.getAttribute("DAY"));
-		session.setAttribute("SCHEDULEARRAY", session.getAttribute("SCHEDULEARRAY"));
-		session.setAttribute("SCHEDULEMEMOARRAY", session.getAttribute("SCHEDULEMEMOARRAY"));
-
+		// セッションから取得
+		User user = (User) session.getAttribute("LOGINUSER");
 		String year_now = ((String) session.getAttribute("YEAR"));
-		String month_now =((String) session.getAttribute("MONTH"));
+		String month_now = ((String) session.getAttribute("MONTH"));
 		String day_now = ((String) session.getAttribute("DAY"));
 
 		// delete文のwhere旬に代入する値を整形してつくる
 		String delete_target_start_time = request.getParameter("TOTALETIME").substring(0, 5) + ":00";
 		delete_target_start_time = year_now + "-" + month_now + "-" + day_now + " " + delete_target_start_time;
-		int edit_id = 1;
-		System.out.println("ちなみにこーなってる" +delete_target_start_time);
+		int id_now = Integer.parseInt(user.getId());
 
 		response.setContentType("text/html; charset=UTF-8");
 		Connection conn = null;
@@ -65,7 +59,7 @@ public class ScheduleDelete extends HttpServlet {
 
 			// ?にセット
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, edit_id);
+			stmt.setInt(1, id_now);
 			stmt.setString(2, delete_target_start_time);
 
 			// delete文を実行する
@@ -102,15 +96,14 @@ public class ScheduleDelete extends HttpServlet {
 
 		}
 
-		// ただmonthから1ひきたかっただけなんだ…
-		// int month_numeric_value = Integer.parseInt(month) - 1;
-
 		StringBuffer sb = new StringBuffer();
 		sb.append("/CalendarJsp/Calendar.jsp");
 		sb.append("?YEAR=");
 		sb.append(year_now);
 		sb.append("&MONTH=");
 		sb.append(month_now);
+		sb.append("&ID=");
+		sb.append(id_now);
 		response.sendRedirect(new String(sb));
 	}
 }
