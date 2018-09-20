@@ -65,7 +65,7 @@
 
 	スケジュール削除確認ページ&nbsp;
 	<a
-		href="/CalendarJsp/scheduleIndex.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
+		href="/CalendarJsp/schedule/scheduleIndex.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
 
 
 	<!--スケジュールの詳細表示部分-->
@@ -90,7 +90,7 @@
 				<%
 					if (schedule_array[index_number].length() == 0) {
 
-						RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/calendar.jsp");
 						dispatcher.forward(request, response);
 
 					}
@@ -113,7 +113,7 @@
 		スケジュールを削除します。一度削除すると元には戻せません。<br> 削除しますか?,<br> <a
 			href="/CalendarJsp/ScheduleDelete?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=totale_time%>">削除する</a>
 		<a
-			href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">キャンセルして詳細に戻る</a>
+			href="/CalendarJsp/shedule/scheduleDetail.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">キャンセルして詳細に戻る</a>
 
 
 

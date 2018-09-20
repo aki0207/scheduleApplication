@@ -23,18 +23,14 @@ import model.User;
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public Login() {
-		super();
-	}
-
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		// リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8");
-		String input_id = request.getParameter("id");
-		String input_pass = request.getParameter("pass");
+		String input_id = request.getParameter("ID");
+		String input_pass = request.getParameter("PASS");
 		String name = "";
-		User login_user = new User(input_id, input_pass,name);
+		User user = new User(input_id, input_pass, name);
 
 		response.setContentType("text/html; charset=UTF-8");
 
@@ -50,6 +46,7 @@ public class Login extends HttpServlet {
 			// SQLを実行し、登録されている名前、パスワードを取得
 			String sql = "select * from users";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
+
 			// selectを実行し、結果票を取得
 			ResultSet rs = pstmt.executeQuery();
 
@@ -58,23 +55,18 @@ public class Login extends HttpServlet {
 				String db_exist_id = rs.getString("ID");
 				String db_exist_pass = rs.getString("PASS");
 				String db_exist_name = rs.getString("NAME");
-				
-				
-				//user名が一致するか
-				if (db_exist_id.equals(input_id)) {
-					System.out.println("ID一致してるやん！");
 
-					//パスワードが一致するか
+				// user名が一致するか
+				if (db_exist_id.equals(input_id)) {
+					// パスワードが一致するか
 					if (db_exist_pass.equals(input_pass)) {
-						System.out.println("パスも一致してるやん！");
-						
-						
-						//ログインに成功した時の処理
-						//現在userインスタンスの名前に何も入っていないからDBにある名前を代入
-						//ユーザー情報をセッションスコープに保存
-						login_user.setName(db_exist_name);
+
+						// ログインに成功した時の処理
+						// 現在userインスタンスの名前に何も入っていないからDBにある名前を代入
+						// ユーザー情報をセッションスコープに保存
+						user.setName(db_exist_name);
 						HttpSession session = request.getSession();
-						session.setAttribute("LOGINUSER", login_user);
+						session.setAttribute("LOGINUSER", user);
 						break;
 
 					}
@@ -82,8 +74,6 @@ public class Login extends HttpServlet {
 				}
 
 			}
-
-	
 
 		} catch (ClassNotFoundException e) {
 
@@ -113,13 +103,9 @@ public class Login extends HttpServlet {
 			}
 
 		}
-		
-	
-	
-	
 
 		// ログイン結果画面にフォワード
-		RequestDispatcher dispacher = request.getRequestDispatcher("/LoginResult.jsp");
+		RequestDispatcher dispacher = request.getRequestDispatcher("/user/loginResult.jsp");
 		dispacher.forward(request, response);
 
 	}

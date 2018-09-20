@@ -97,7 +97,7 @@ public class ScheduleDelete extends HttpServlet {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("/CalendarJsp/Calendar.jsp");
+		sb.append("/CalendarJsp/schedule/calendar.jsp");
 		sb.append("?YEAR=");
 		sb.append(year_now);
 		sb.append("&MONTH=");

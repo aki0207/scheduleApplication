@@ -3,7 +3,7 @@
 <%@ page import="model.User"%>
 <%
 	//セッションスコープからユーザー情報を取得
-	User login_user = (User) session.getAttribute("LOGINUSER");
+	User user = (User) session.getAttribute("LOGINUSER");
 %>
 <!DOCTYPE html>
 <html>
@@ -14,22 +14,22 @@
 <body>
 	<h1>スケジュール管理ログイン</h1>
 	<%
-		if (login_user != null) {
+		if (user != null) {
 	%>
 
 	<p>ログインに成功しました</p>
 	<p>
-		ようこそ-<%=login_user.getName()%>さん
+		ようこそ-<%=user.getName()%>さん
 	</p>
 	<%
 		// セッションにuser情報を保存
-			session.setAttribute("LOGINUSER", login_user);
+			session.setAttribute("LOGINUSER", user);
 
 			//セッションスコープの情報を破棄(テスト用)
 			//session = request.getSession();
 			//session.invalidate();
 	%>
-	<a href="/CalendarJsp/Calendar.jsp?ID=<%=login_user.getId()%>">月一覧へ</a>
+	<a href="/CalendarJsp/schedule/calendar.jsp?ID=<%=user.getId()%>">月一覧へ</a>
 
 	<%
 		} else {

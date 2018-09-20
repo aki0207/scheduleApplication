@@ -49,7 +49,6 @@ div.dispSchedule {
 
 		if (totale_time.equals("") || index_number_conversion_before.equals("") || id_now == -999 || user == null) {
 
-			
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -70,7 +69,7 @@ div.dispSchedule {
 
 	スケジュール詳細ページ&nbsp;
 	<a
-		href="/CalendarJsp/scheduleIndex.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
+		href="/CalendarJsp/schedule/scheduleIndex.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -87,7 +86,7 @@ div.dispSchedule {
 				<%
 					if (schedule_array[i].length() != 0) {
 				%> <a
-				href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0, 11)%>"><%=schedule_array[i]%></a>
+				href="/CalendarJsp/schedule/scheduleDetail.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=i%>&TOTALETIME=<%=schedule_array[i].substring(0, 11)%>"><%=schedule_array[i]%></a>
 			</td>
 		</tr>
 
@@ -136,7 +135,7 @@ div.dispSchedule {
 
 				<%
 					// 存在しないindexnumberを指定された場合、トップページへ
-						RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/calendar.jsp");
 						dispatcher.forward(request, response);
 
 					}
@@ -155,9 +154,9 @@ div.dispSchedule {
 		</table>
 
 		<a
-			href="/CalendarJsp/scheduleEdit.jsp?ID=<%=id_now %>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">編集へ</a>
+			href="/CalendarJsp/schedule/scheduleEdit.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">編集へ</a>
 		<a
-			href="/CalendarJsp/scheduleDelete.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">削除へ</a>
+			href="/CalendarJsp/schedule/scheduleDelete.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>">削除へ</a>
 
 
 

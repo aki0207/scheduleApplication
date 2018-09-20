@@ -41,6 +41,7 @@ public class ScheduleEdit extends HttpServlet {
 		String plan;
 		String memo;
 		String parameter;
+		String totale_time;
 
 		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求む
 		Month m = new Month();
@@ -65,10 +66,12 @@ public class ScheduleEdit extends HttpServlet {
 		plan = m.stringParameterCheck(parameter);
 		parameter = request.getParameter("MEMO");
 		memo = m.stringParameterCheck(parameter);
+		totale_time = request.getParameter("TOTALETIME");
+		
 
 		// 日付が不正な値な時、パラメータ無しでCalendar.jspにリダイレクト
 		if (year.equals("") || month.equals("") || day.equals("")) {
-			response.sendRedirect("/CalendarJsp/Calendar.jsp");
+			response.sendRedirect("/CalendarJsp/schedule/calendar.jsp");
 		}
 
 		String date_format;
@@ -97,7 +100,7 @@ public class ScheduleEdit extends HttpServlet {
 		String edit_target_year = (String) session.getAttribute("YEAR");
 		String edit_target_month = (String) session.getAttribute("MONTH");
 		String edit_target_day = (String) session.getAttribute("DAY");
-		String edit_target_start_time = request.getParameter("TOTALETIME").substring(0, 5) + ":00";
+		String edit_target_start_time = totale_time.substring(0, 5) + ":00";
 
 		// 0埋め
 		edit_target_year = String.format("%02d", Integer.parseInt(edit_target_year));
@@ -107,6 +110,7 @@ public class ScheduleEdit extends HttpServlet {
 		// 整形して実際に流されるのものがこちら
 		String edit_target_search_query = edit_target_year + "-" + edit_target_month + "-" + edit_target_day + " "
 				+ edit_target_start_time;
+		
 
 		int id_now = Integer.parseInt(user.getId());
 
@@ -128,19 +132,21 @@ public class ScheduleEdit extends HttpServlet {
 
 			// sql文の値をセット
 			stmt.setInt(1, id_now);
+			System.out.println(id_now);
 			stmt.setString(2, date_query);
 			System.out.println(date_query);
 			stmt.setString(3, start_time_query);
-			System.out.println("はじまりは" + start_time_query);
+			System.out.println(start_time_query);
 			stmt.setString(4, start_time_query);
+			System.out.println(start_time_query);
 			stmt.setString(5, end_time_query);
 			System.out.println(end_time_query);
 			stmt.setString(6, start_time_query);
+			System.out.println(start_time_query);
 			stmt.setString(7, end_time_query);
+			System.out.println(end_time_query);
 
 			// selectを実行し、結果票を取得
-			System.out.println("実行するよん");
-			;
 			ResultSet rs = stmt.executeQuery();
 
 			// 検索結果が存在しない場合のみ追加を行う
@@ -199,7 +205,7 @@ public class ScheduleEdit extends HttpServlet {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("/CalendarJsp/Calendar.jsp");
+		sb.append("/CalendarJsp/schedule/calendar.jsp");
 		sb.append("?YEAR=");
 		sb.append(year);
 		sb.append("&MONTH=");

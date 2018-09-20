@@ -98,8 +98,6 @@ public class ScheduleToday extends HttpServlet {
 
 		// where旬でつかう
 		String specified_day = year_now + "-" + month_shaping_after + "-" + day_shaping_after + " 00:00:00";
-		// ログイン機能をつけた時に考える
-		int id = 1;
 
 		// 1日は24時間なんで
 		String[] schedule_array = new String[24];
@@ -202,16 +200,16 @@ public class ScheduleToday extends HttpServlet {
 		session.setAttribute("SCHEDULEMEMOARRAY", schedule_memo_array);
 
 		// ユーザーのスケジュール表示画面へフォワード
-		//RequestDispatcher dispatcher = request.getRequestDispatcher("/scheduleIndex.jsp");
-		//dispatcher.forward(request, response);
-		
+		// RequestDispatcher dispatcher =
+		// request.getRequestDispatcher("/scheduleIndex.jsp");
+		// dispatcher.forward(request, response);
+
 		StringBuffer sb = new StringBuffer();
-		sb.append("/CalendarJsp/scheduleIndex.jsp");
+		sb.append("/CalendarJsp/schedule/scheduleIndex.jsp");
 		sb.append("?ID=");
 		sb.append(id_now);
-		
-		response.sendRedirect(new String(sb));
 
+		response.sendRedirect(new String(sb));
 
 	}
 }

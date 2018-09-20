@@ -73,12 +73,12 @@ div.inputForm {
 
 
 
-	スケジュール詳細ページ&nbsp;
+	スケジュール編集ページ
 	<br>
 
 
 	<a
-		href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0, 11)%>">戻る</a>
+		href="/CalendarJsp/schedule/scheduleDetail.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>&INDEXNO=<%=index_number%>&TOTALETIME=<%=schedule_array[index_number].substring(0, 11)%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -92,12 +92,16 @@ div.inputForm {
 		<tr>
 			<td><%=i%>:00</td>
 			<!-- 時分をDetailに送るため -->
+
 			<%
-				if (schedule_array[i].length() != 0) {
-						totale_time = schedule_array[i].substring(0, 11);
+				//Detailに送る用のtotale_timeパラメータ
+					String detail_totale_time;
+
+					if (schedule_array[i].length() != 0) {
+						detail_totale_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now %>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/schedule/scheduleDetail.jsp?ID=<%=id_now%>&TOTALETIME=<%=detail_totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
 
 
 
@@ -105,7 +109,7 @@ div.inputForm {
 				} else {
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/schedule/scheduleDetail.jsp?ID=<%=id_now%>"><%=schedule_array[i]%></a></td>
 
 			<%
 				}
@@ -123,11 +127,13 @@ div.inputForm {
 
 	</table>
 
-	<!--セレクトボックスを作っていく
-		まずは年度から			-->
+
+
+	<!--セレクトボックスを作っていく-->
 
 	<div class="inputForm">
 
+		
 		<form
 			action="/CalendarJsp/ScheduleEdit?TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>"
 			method="post">

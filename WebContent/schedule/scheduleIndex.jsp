@@ -76,7 +76,7 @@ div.inputForm {
 
 
 	<a
-		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
+		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -95,7 +95,7 @@ div.inputForm {
 						totale_time = schedule_array[i].substring(0, 11);
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/schedule/scheduleDetail.jsp?ID=<%=id_now%>&TOTALETIME=<%=totale_time%>&INDEXNO=<%=i%>"><%=schedule_array[i]%></a></td>
 
 
 
@@ -103,7 +103,7 @@ div.inputForm {
 				} else {
 			%>
 			<td width="800" height="30"><a
-				href="/CalendarJsp/scheduleDetail.jsp"><%=schedule_array[i]%></a></td>
+				href="/CalendarJsp/schedule/scheduleDetail.jsp"><%=schedule_array[i]%></a></td>
 
 			<%
 				}
@@ -125,7 +125,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form action="/CalendarJsp/AddSchedule" method="post">
+		<form action="/CalendarJsp/ScheduleAdd" method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>

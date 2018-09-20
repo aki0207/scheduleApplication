@@ -2,46 +2,37 @@ package scheduleSql;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
 import model.*;
 
-import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
-
-@WebServlet("/AddSchedule")
-public class AddSchedule extends HttpServlet {
+@WebServlet("/ScheduleAdd")
+public class ScheduleAdd extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("LOGINUSER");
-		
-		//ログインしてるか確認
+
+		// ログインしてるか確認
 		if (user == null) {
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 			dispatcher.forward(request, response);
 
 		}
-		
-		
+
 		// パラメータ格納用
 		String year;
 		String month;
@@ -80,7 +71,7 @@ public class AddSchedule extends HttpServlet {
 
 		// 日付が不正な値な時、パラメータ無しでCalendar.jspにリダイレクト
 		if (year.equals("") || month.equals("") || day.equals("")) {
-			response.sendRedirect("/CalendarJsp/Calendar.jsp");
+			response.sendRedirect("/CalendarJsp/schedule/calendar.jsp");
 		}
 
 		// sqlのクエリー達
@@ -89,7 +80,6 @@ public class AddSchedule extends HttpServlet {
 		String date_query;
 		String start_time_query;
 		String end_time_query;
-		
 
 		// 0埋めで整形
 		month = String.format("%02d", Integer.parseInt(month));
@@ -105,14 +95,6 @@ public class AddSchedule extends HttpServlet {
 		date_query = date_format + " 00:00:00";
 		start_time_query = date_format + " " + shour + ":" + sminute + ":00";
 		end_time_query = date_format + " " + ehour + ":" + eminute + ":00";
-
-		// 日付が指定されていない場合開始時間及び終了時間をnullで登録
-/*		if (shour.equals("") || sminute.equals("") || eminute.equals("") || ehour.equals("")) {
-
-			start_time_query = null;
-			end_time_query = null;
-
-		}*/
 
 		response.setContentType("text/html; charset=UTF-8");
 		Connection conn = null;
@@ -138,13 +120,12 @@ public class AddSchedule extends HttpServlet {
 			stmt.setString(6, end_time_query);
 
 			// selectを実行し、結果票を取得
-			System.out.println("実行するよん");;
+			System.out.println("実行するよん");
+			;
 			ResultSet rs = stmt.executeQuery();
 
 			// 検索結果が存在しない場合のみ追加を行う
 			if (!(rs.isBeforeFirst())) {
-				
-				System.out.println("ここにはきてる");
 
 				// insert文を準備
 				sql = "insert  into schedule (id, scheduledate, starttime, endtime, schedule, schedulememo) values ( ?,to_date( ?,'YYYY-MM-DD HH24:MI:SS'), to_date(?,'YYYY-MM-DD HH24:MI:SS'),to_date(?,'YYYY-MM-DD HH24:MI:SS'),? ,?)";
@@ -195,7 +176,7 @@ public class AddSchedule extends HttpServlet {
 		}
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("/CalendarJsp/Calendar.jsp");
+		sb.append("/CalendarJsp/schedule/calendar.jsp");
 		sb.append("?YEAR=");
 		sb.append(year);
 		sb.append("&MONTH=");

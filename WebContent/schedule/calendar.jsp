@@ -78,9 +78,9 @@
 	%>
 
 	<a
-		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
+		href="/CalendarJsp/calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
 	<a
-		href="/CalendarJsp/Calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now - 1%>">前月</a>
+		href="/CalendarJsp/calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now - 1%>">前月</a>
 
 
 
