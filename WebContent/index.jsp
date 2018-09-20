@@ -13,12 +13,12 @@
 		スケジュール管理
 	</h1>
 	<form action="/CalendarJsp/Login" method="post">
-		ユーザーID:<input type="text" name="ID"><br> パスワード:<input
-			type="text" name="PASS"><br> <input type="submit"
+		ユーザーID:<input type="text" name="ID" required><br> パスワード:<input
+			type="text" name="PASS" required><br> <input type="submit"
 			value="ログイン">
 	</form>
 
 	<p>ユーザー登録はこちら</p>
-	<a href="/CalendarJsp/registerUserInputForm.jsp">登録へ</a>
+	<a href="/CalendarJsp/user/registerUserInputForm.jsp">登録へ</a>
 </body>
 </html>

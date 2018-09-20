@@ -14,8 +14,15 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(String id, String pass, String name) {
+	public User(String pass, String name) {
 
+		this.pass = pass;
+		this.name = name;
+
+	}
+	
+	public User(String id,String pass, String name) {
+		
 		this.id = id;
 		this.pass = pass;
 		this.name = name;
@@ -44,6 +51,13 @@ public class User implements Serializable {
 
 		this.name = name;
 		return name;
+
+	}
+	
+	public String setId(String id) {
+
+		this.id = (id);
+		return id;
 
 	}
 
