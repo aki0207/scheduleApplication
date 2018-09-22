@@ -53,6 +53,8 @@ div.inputForm {
 			return;
 
 		}
+		
+		
 
 		//ログインしているか確認
 		user.login_status = user.loginUser(id_now, user);
@@ -126,7 +128,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form action="/CalendarJsp/ScheduleAdd" method="post">
+		<form action="/CalendarJsp/ScheduleAdd?ID=<%=id_now%>" method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>
