@@ -46,7 +46,7 @@ public class ScheduleAdd extends HttpServlet {
 		String memo;
 		String id_now;
 
-		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求
+		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求む
 		Month m = new Month();
 
 		// パラメータのチェックをすべきやけど、ツール等をつかわん限り、不正な値を作れそうなのは日のみ。 そのため今回は日のみチェックを行う
