@@ -128,7 +128,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		<form action="/CalendarJsp/ScheduleAdd?ID=<%=id_now%>" method="post">
+		<form action="/CalendarJsp/ScheduleAdd" method="post">
 			<table>
 				<tr>
 					<td nowrap>日付</td>

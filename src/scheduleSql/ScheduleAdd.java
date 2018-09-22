@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.sun.xml.internal.bind.v2.model.core.ID;
+
 import model.*;
 
 @WebServlet("/ScheduleAdd")
@@ -24,12 +27,15 @@ public class ScheduleAdd extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("LOGINUSER");
+		System.out.println(user.getId());
 
 		// ログインしてるか確認
-		if (user == null) {
+		if (user.getId() == null) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+
+			return;
 
 		}
 
@@ -61,7 +67,8 @@ public class ScheduleAdd extends HttpServlet {
 		eminute = request.getParameter("EMINUTE");
 		plan = request.getParameter("PLAN");
 		memo = request.getParameter("MEMO");
-		id_now = request.getParameter("ID");
+		id_now = user.getId();
+		System.out.println("id_nowは" + id_now);
 
 		// 日付が不正な値な時,日付一覧ページへリダイレクト
 		day_parameter = m.dayParameterCheck(Integer.parseInt(year), Integer.parseInt(month), day);
@@ -97,6 +104,8 @@ public class ScheduleAdd extends HttpServlet {
 
 		response.setContentType("text/html; charset=UTF-8");
 		Connection conn = null;
+		ResultSet rs = null;
+		PreparedStatement stmt = null;
 
 		try {
 
@@ -105,23 +114,18 @@ public class ScheduleAdd extends HttpServlet {
 
 			// select文で時間に重複がないか調べる
 			String sql = "select schedule from schedule where id = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS') and (starttime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS') or endtime between to_date(?,'YYYY-MM-DD HH24:MI:SS') and to_date(?,'YYYY-MM-DD HH24:MI:SS'))";
-			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt = conn.prepareStatement(sql);
 
 			// sql文の値をセット
 			stmt.setInt(1, id);
 			stmt.setString(2, date_query);
-			System.out.println(date_query);
 			stmt.setString(3, start_time_query);
-			System.out.println(start_time_query);
 			stmt.setString(4, end_time_query);
-			System.out.println(end_time_query);
 			stmt.setString(5, start_time_query);
 			stmt.setString(6, end_time_query);
 
 			// selectを実行し、結果票を取得
-			System.out.println("実行するよん");
-			;
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
 			// 検索結果が存在しない場合のみ追加を行う
 			if (!(rs.isBeforeFirst())) {
@@ -160,6 +164,17 @@ public class ScheduleAdd extends HttpServlet {
 		} finally {
 
 			try {
+
+				if (rs != null) {
+
+					rs.close();
+				}
+
+				if (stmt != null) {
+
+					stmt.close();
+
+				}
 
 				if (conn != null) {
 

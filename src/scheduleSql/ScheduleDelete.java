@@ -46,6 +46,7 @@ public class ScheduleDelete extends HttpServlet {
 
 		response.setContentType("text/html; charset=UTF-8");
 		Connection conn = null;
+		PreparedStatement stmt = null;
 
 		try {
 			// JDBCドライバを読み込み
@@ -58,7 +59,7 @@ public class ScheduleDelete extends HttpServlet {
 			String sql = "delete from schedule where id = ? and starttime = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
 
 			// ?にセット
-			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, id_now);
 			stmt.setString(2, delete_target_start_time);
 
@@ -82,6 +83,12 @@ public class ScheduleDelete extends HttpServlet {
 		} finally {
 
 			try {
+				
+				if (stmt != null) {
+
+					stmt.close();
+
+				}
 
 				if (conn != null) {
 

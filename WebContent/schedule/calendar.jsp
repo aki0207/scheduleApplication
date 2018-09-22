@@ -21,6 +21,11 @@ a {
 	text-decoration: none;
 }
 
+a:visited {
+	color: #0000ff;
+	text-decoration: none
+}
+
 /* .logout {
 	align="right";
 } */
@@ -206,4 +211,4 @@ a {
 
 
 	</form>
-	</ body></ html>
+	</ body></html>

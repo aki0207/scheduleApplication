@@ -49,9 +49,9 @@ div.inputForm {
 
 		if (totale_time.equals("") || index_number_conversion_before.equals("") || id_now == -999 || user == null) {
 
-			// ユーザーのスケジュール表示画面へフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 		}
 
 		//ログインしているか確認
@@ -59,7 +59,7 @@ div.inputForm {
 
 		if (user.login_status == false) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
 
 		}
@@ -133,7 +133,7 @@ div.inputForm {
 
 	<div class="inputForm">
 
-		
+
 		<form
 			action="/CalendarJsp/ScheduleEdit?TOTALETIME=<%=totale_time%>&INDEXNO=<%=index_number%>"
 			method="post">
@@ -267,7 +267,7 @@ div.inputForm {
 						//存在しないindex_numberを入力されたときはトップページへ
 						if (schedule_array[index_number].length() == 0) {
 
-							RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp");
+							RequestDispatcher dispatcher = request.getRequestDispatcher("/Calendar.jsp?ID=" + id_now);
 							dispatcher.forward(request, response);
 
 						}

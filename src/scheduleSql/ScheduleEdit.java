@@ -31,47 +31,46 @@ public class ScheduleEdit extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("LOGINUSER");
+
+		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求む
+		Month m = new Month();
+
 		String year;
 		String month;
 		String day;
+		int day_parameter;
 		String shour;
 		String sminute;
 		String ehour;
 		String eminute;
 		String plan;
 		String memo;
-		String parameter;
 		String totale_time;
+		String id_now_parameter;
 
-		// parameterCHeckを呼び出したいがためだけにmonthインスタンスを生成.よき方法求む
-		Month m = new Month();
-
-		// パラメータが不正な値じゃないかチェック×2
+		// パラメータのチェックをすべきやけど、ツール等をつかわん限り、不正な値を作れそうなのは日のみ。 そのため今回は日のみチェックを行う
 		request.setCharacterEncoding("UTF-8");
-		parameter = request.getParameter("YEAR");
-		year = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("MONTH");
-		month = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("DAY");
-		day = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("SHOUR");
-		shour = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("SMINUTE");
-		sminute = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("EHOUR");
-		ehour = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("EMINUTE");
-		eminute = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("PLAN");
-		plan = m.stringParameterCheck(parameter);
-		parameter = request.getParameter("MEMO");
-		memo = m.stringParameterCheck(parameter);
+		year = request.getParameter("YEAR");
+		month = request.getParameter("MONTH");
+		day = request.getParameter("DAY");
+		shour = request.getParameter("SHOUR");
+		sminute = request.getParameter("SMINUTE");
+		ehour = request.getParameter("EHOUR");
+		eminute = request.getParameter("EMINUTE");
+		plan = request.getParameter("PLAN");
+		memo = request.getParameter("MEMO");
 		totale_time = request.getParameter("TOTALETIME");
-		
+		id_now_parameter = user.getId();
 
 		// 日付が不正な値な時、パラメータ無しでCalendar.jspにリダイレクト
-		if (year.equals("") || month.equals("") || day.equals("")) {
-			response.sendRedirect("/CalendarJsp/schedule/calendar.jsp");
+		day_parameter = m.dayParameterCheck(Integer.parseInt(year), Integer.parseInt(month), day);
+		if (day_parameter == -999) {
+
+			response.sendRedirect("/CalendarJsp/schedule/calendar.jsp?ID=" + id_now_parameter);
+			return;
+
 		}
 
 		String date_format;
@@ -95,8 +94,7 @@ public class ScheduleEdit extends HttpServlet {
 		end_time_query = date_format + " " + ehour + ":" + eminute + ":00";
 
 		// セッション及びパラメータから値を持って来て、where旬で更新元のデータを指定するための値を用意
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("LOGINUSER");
+
 		String edit_target_year = (String) session.getAttribute("YEAR");
 		String edit_target_month = (String) session.getAttribute("MONTH");
 		String edit_target_day = (String) session.getAttribute("DAY");
@@ -110,7 +108,6 @@ public class ScheduleEdit extends HttpServlet {
 		// 整形して実際に流されるのものがこちら
 		String edit_target_search_query = edit_target_year + "-" + edit_target_month + "-" + edit_target_day + " "
 				+ edit_target_start_time;
-		
 
 		int id_now = Integer.parseInt(user.getId());
 
