@@ -8,8 +8,27 @@
 <head>
 <meta charset=UTF-8">
 <title>カレンダーの表示</title>
+<style>
+table th {
+	padding: 30px 70px;
+}
+
+table td {
+	padding-bottom: 50px;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* .logout {
+	align="right";
+} */
+</style>
 </head>
 <body>
+
+
 
 
 
@@ -30,8 +49,9 @@
 		//セッションにuser情報がないか、idが不正な値ならログインページへ
 		if (user == null || id_now == -999) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 
 		}
 
@@ -40,7 +60,7 @@
 
 		if (user.login_status == false) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
 
 		}
@@ -78,9 +98,14 @@
 	%>
 
 	<a
-		href="/CalendarJsp/calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
+		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
 	<a
-		href="/CalendarJsp/calendar.jsp?YEAR=<%=year_now%>&MONTH=<%=month_now - 1%>">前月</a>
+		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now - 1%>">前月</a>
+
+	<div style="position: absolute; top: 0; right: 0;">
+		<a href="/CalendarJsp/Logout">ログアウト</a>
+	</div>
+
 
 
 
@@ -129,7 +154,7 @@
 			%>
 
 
-			<td><a
+			<td align="left"><a
 				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
 
 
@@ -177,7 +202,8 @@
 		%>
 
 	</table>
-	</form>
 
-</body>
-</html>
+
+
+	</form>
+	</ body></ html>

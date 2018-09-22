@@ -49,8 +49,9 @@ div.dispSchedule {
 
 		if (totale_time.equals("") || index_number_conversion_before.equals("") || id_now == -999 || user == null) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 		}
 
 		//ログインしているか確認
@@ -58,8 +59,9 @@ div.dispSchedule {
 
 		if (user.login_status == false) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 
 		}
 
@@ -67,7 +69,7 @@ div.dispSchedule {
 	%>
 
 
-	スケジュール詳細ページ&nbsp;
+	スケジュール詳細ページ
 	<a
 		href="/CalendarJsp/schedule/scheduleIndex.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=day_now%>">戻る</a>
 	<table border="1">
@@ -135,7 +137,7 @@ div.dispSchedule {
 
 				<%
 					// 存在しないindexnumberを指定された場合、トップページへ
-						RequestDispatcher dispatcher = request.getRequestDispatcher("/calendar.jsp");
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 						dispatcher.forward(request, response);
 
 					}

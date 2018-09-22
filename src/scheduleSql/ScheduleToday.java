@@ -63,8 +63,9 @@ public class ScheduleToday extends HttpServlet {
 
 		if (user.login_status == false) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 
 		}
 
@@ -112,6 +113,8 @@ public class ScheduleToday extends HttpServlet {
 
 		response.setContentType("text/html; charset=UTF-8");
 		Connection conn = null;
+		ResultSet rs = null;
+		PreparedStatement stmt = null;
 
 		try {
 
@@ -119,13 +122,13 @@ public class ScheduleToday extends HttpServlet {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.132:1521:xe", "stockuser", "moriara0029");
 
 			String sql = "SELECT * FROM schedule WHERE ID = ? and scheduledate = to_date(?,'YYYY-MM-DD HH24:MI:SS')";
-			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt = conn.prepareStatement(sql);
 
 			// sql文の値をセット
 			stmt.setInt(1, id_now);
 			stmt.setString(2, specified_day);
 			// selectを実行し、結果票を取得
-			ResultSet rs = stmt.executeQuery();
+			rs = stmt.executeQuery();
 
 			// 結果表に格納されたレコードの内容を表示
 			while (rs.next()) {
@@ -178,6 +181,17 @@ public class ScheduleToday extends HttpServlet {
 
 			try {
 
+				if (rs != null) {
+
+					rs.close();
+				}
+
+				if (stmt != null) {
+
+					stmt.close();
+
+				}
+
 				if (conn != null) {
 
 					conn.close();
@@ -198,11 +212,6 @@ public class ScheduleToday extends HttpServlet {
 		session.setAttribute("DAY", day_now);
 		session.setAttribute("SCHEDULEARRAY", schedule_array);
 		session.setAttribute("SCHEDULEMEMOARRAY", schedule_memo_array);
-
-		// ユーザーのスケジュール表示画面へフォワード
-		// RequestDispatcher dispatcher =
-		// request.getRequestDispatcher("/scheduleIndex.jsp");
-		// dispatcher.forward(request, response);
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("/CalendarJsp/schedule/scheduleIndex.jsp");

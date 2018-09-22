@@ -48,8 +48,9 @@ div.inputForm {
 		//セッションにuser情報がないか、idが不正な値ならログインページへ
 		if (user == null || id_now == -999) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 
 		}
 
@@ -58,7 +59,7 @@ div.inputForm {
 
 		if (user.login_status == false) {
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
 
 		}

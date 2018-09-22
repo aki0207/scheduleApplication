@@ -17,7 +17,7 @@ public class Month {
 
 	// パラメータの確認int型ver
 	public int idParameterCheck(String id_parameter) {
-		
+
 		int return_id;
 
 		if (id_parameter == null || id_parameter.length() == 0) {
@@ -47,16 +47,8 @@ public class Month {
 			return_string_value = "";
 
 		} else {
-
-			try {
-
-				return_string_value = parameter;
-
-			} catch (NumberFormatException e) {
-
-				return_string_value = "";
-
-			}
+			
+			return_string_value = parameter;
 		}
 
 		return return_string_value;
