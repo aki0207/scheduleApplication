@@ -47,7 +47,7 @@ public class Month {
 			return_string_value = "";
 
 		} else {
-			
+
 			return_string_value = parameter;
 		}
 
@@ -179,7 +179,6 @@ public class Month {
 					}
 
 					mold_check = Integer.parseInt(totale_time_parameter.substring(i, i + 1));
-					System.out.println(mold_check);
 				}
 			} catch (NumberFormatException e) {
 
