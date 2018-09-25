@@ -6,13 +6,19 @@
 <head>
 <meta charset=UTF-8">
 <title>ユーザー登録</title>
+<style>
+a:visited {
+	color: #0000ff;
+	text-decoration: none
+}
+</style>
 </head>
 <body>
 	<h1>ユーザー登録ページ</h1>
 	<form action="/CalendarJsp/RegisterUser" method="post">
 		名前&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:<input type="text" required name="NAME"><br>
 		パスワード:<input type="text"  required name="PASS" ><br> <input
-			type="submit" value="登録"> <a href="/index">ログインページへ戻る</a>
+			type="submit" value="登録"> <a href="/CalendarJsp/index.jsp">ログインページへ戻る</a>
 	</form>
 
 

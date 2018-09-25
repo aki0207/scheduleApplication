@@ -26,9 +26,9 @@ a:visited {
 	text-decoration: none
 }
 
-/* .logout {
-	align="right";
-} */
+#sunday {
+	color: red;
+}
 </style>
 </head>
 <body>
@@ -127,22 +127,18 @@ a:visited {
 			<th>土</th>
 		</tr>
 
-		<!-- その月の最終日 -->
 		<%
+			//その月の最終日
 			int max_day = month.cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		%>
 
-		<!--1日の曜日  -->
-		<%
+			//1日の曜日
 			int start_index = month.cal.get(Calendar.DAY_OF_WEEK);
 		%>
 
 
 		<tr>
-
-			<!-- 1週目の1日までを空白で埋める -->
-
 			<%
+				//1週目の1日までを空白で埋める
 				for (int i = 1; i < start_index; i++) {
 			%>
 
@@ -156,38 +152,39 @@ a:visited {
 
 				//当月の最終日まで日付けを入れていく
 				for (int i = 1; i <= max_day; i++) {
+
+					month.cal.set(Calendar.DATE, i);
+
+					//日曜日なら赤字で数字を表示
+					if (Calendar.SUNDAY == month.cal.get(Calendar.DAY_OF_WEEK)) {
 			%>
 
+			<td align="left"><a id="sunday"
+				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
 
+			<%
+				} else {
+			%>
+
+			<!-- 日曜以外は青で表示 -->
 			<td align="left"><a
 				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
 
-
 			<%
-				month.cal.set(Calendar.DATE, i);
-			%>
+				}
 
-
-
-			<!-- 土曜日なら次の列へ -->
-			<%
-				if (Calendar.SATURDAY == month.cal.get(Calendar.DAY_OF_WEEK)) {
+					//土曜日なら次の列へ
+					if (Calendar.SATURDAY == month.cal.get(Calendar.DAY_OF_WEEK)) {
 			%>
 
 		</tr>
 
 		<%
 			}
-		%>
 
-
-
-		<%
 			}
-		%>
 
-		<!-- 当月の最終日が土曜日じゃない時、土曜日まで余白を埋める -->
-		<%
+			//当月の最終日が土曜日じゃない時、土曜日まで余白を埋める
 			if (month.cal.get(month.cal.DAY_OF_WEEK) < 7) {
 		%>
 
@@ -211,4 +208,5 @@ a:visited {
 
 
 	</form>
-	</ body></html>
+	</ body>
+</html>

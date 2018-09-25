@@ -12,6 +12,16 @@ div.inputForm {
 	top: 10px;
 	right: 600px;
 }
+
+a:visited {
+	color: #0000ff;
+	text-decoration: none
+}
+
+.button {
+	position: relative;
+	left: 45px;
+}
 </style>
 </head>
 <body>
@@ -61,6 +71,7 @@ div.inputForm {
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 			dispatcher.forward(request, response);
+			return;
 
 		}
 
@@ -85,8 +96,8 @@ div.inputForm {
 			<td>予定</td>
 		</tr>
 
-		<!-- 0時から23時までを表示 -->
 		<%
+			//0時から23時までを表示
 			for (int i = 0; i < 24; i++) {
 		%>
 		<tr>
@@ -144,10 +155,8 @@ div.inputForm {
 
 							<%
 								for (int i = year_now; i < year_now + 5; i++) {
-							%>
 
-							<%
-								//パラメータをプルダウンメニューの初期値にする
+									//パラメータをプルダウンメニューの初期値にする
 									if (i == year_now) {
 							%>
 
@@ -168,10 +177,8 @@ div.inputForm {
 
 							<%
 								for (int j = 1; j < 13; j++) {
-							%>
 
-							<%
-								if (j == month_now) {
+									if (j == month_now) {
 							%>
 
 							<option value=<%=j%> selected><%=j%>日
@@ -190,32 +197,25 @@ div.inputForm {
 
 							<%
 								for (int k = 1; k < 32; k++) {
-							%>
 
-							<%
-								if (k == day_now) {
+									if (k == day_now) {
 							%>
 
 							<option value=<%=k%> selected><%=k%>日
 
 								<%
 								}
-							%>
 
-								<%
 									if (k != day_now) {
-								%>
+							%>
 							
 							<option value=<%=k%>><%=k%>日
 
 								<%
 															}
+
+															}
 														%>
-
-
-								<%
-									}
-								%>
 							
 					</select></td>
 				</tr>
@@ -287,7 +287,7 @@ div.inputForm {
 
 
 
-			<p>
+			<p class="button">
 				<input type="submit" value="変更する"> <input type="reset"
 					value="入力し直す">
 			<p>

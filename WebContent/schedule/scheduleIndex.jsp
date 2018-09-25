@@ -12,6 +12,16 @@ div.inputForm {
 	top: 10px;
 	right: 600px;
 }
+
+a:visited {
+	color: #0000ff;
+	text-decoration: none
+}
+
+.button {
+	position: relative;
+	left: 45px;
+}
 </style>
 </head>
 <body>
@@ -53,8 +63,6 @@ div.inputForm {
 			return;
 
 		}
-		
-		
 
 		//ログインしているか確認
 		user.login_status = user.loginUser(id_now, user);
@@ -79,7 +87,7 @@ div.inputForm {
 
 
 	<a
-		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now %>&YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
+		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now%>">戻る</a>
 	<table border="1">
 		<tr>
 			<td>時刻</td>
@@ -160,10 +168,8 @@ div.inputForm {
 
 							<%
 								for (int j = 1; j < 13; j++) {
-							%>
 
-							<%
-								if (j == month_now) {
+									if (j == month_now) {
 							%>
 
 							<option value=<%=j%> selected><%=j%>月
@@ -182,10 +188,8 @@ div.inputForm {
 
 							<%
 								for (int k = 1; k < 32; k++) {
-							%>
 
-							<%
-								if (k == day_now) {
+									if (k == day_now) {
 							%>
 
 							<option value=<%=k%> selected><%=k%>日
@@ -202,12 +206,9 @@ div.inputForm {
 
 								<%
 															}
+
+															}
 														%>
-
-
-								<%
-									}
-								%>
 							
 					</select></td>
 				</tr>
@@ -269,10 +270,10 @@ div.inputForm {
 
 
 
-			<p>
+			<p class="button">
 				<input type="submit" value="登録する"> <input type="reset"
 					value="入力し直す">
-			<p>
+			</p>
 		</form>
 
 

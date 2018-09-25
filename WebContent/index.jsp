@@ -7,6 +7,12 @@
 
 <meta charset=UTF-8">
 <title>スケジュール管理</title>
+<style>
+a:visited {
+	color: #0000ff;
+	text-decoration: none
+}
+</style>
 </head>
 <body>
 	<h1>スケジュール管理</h1>
@@ -18,9 +24,10 @@
 
 	<p>ユーザー登録はこちら</p>
 	<a href="/CalendarJsp/user/registerUserInputForm.jsp">登録へ</a>
-	
+
 	<!-- ブラウザバックを認めない -->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script>
 		// History API が使えるブラウザかどうかをチェック
 		if (window.history && window.history.pushState) {

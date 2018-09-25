@@ -12,6 +12,11 @@ div.dispSchedule {
 	top: 10px;
 	right: 500px;
 }
+
+a:visited {
+	color: #0000ff;
+	text-decoration: none
+}
 </style>
 </head>
 <body>
@@ -78,8 +83,8 @@ div.dispSchedule {
 			<td>予定</td>
 		</tr>
 
-		<!-- 0時から23時までを表示 -->
 		<%
+			// 0時から23時までを表示
 			for (int i = 0; i < 24; i++) {
 		%>
 		<tr>
@@ -94,13 +99,7 @@ div.dispSchedule {
 
 		<%
 			}
-		%>
 
-
-
-
-
-		<%
 			}
 		%>
 
@@ -133,10 +132,8 @@ div.dispSchedule {
 
 				<%
 					} else {
-				%>
 
-				<%
-					// 存在しないindexnumberを指定された場合、トップページへ
+						// 存在しないindexnumberを指定された場合、トップページへ
 						RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorClose");
 						dispatcher.forward(request, response);
 
