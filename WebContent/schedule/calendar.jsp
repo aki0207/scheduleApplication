@@ -9,20 +9,20 @@
 <meta charset=UTF-8">
 <title>カレンダーの表示</title>
 <style>
-table th {
-	padding: 30px 70px;
+table {
+	width: 60%;
+	height: 70%;
+	table-layout: fixed;
 }
 
-table td {
-	padding-bottom: 50px;
-}
+
 
 a {
 	text-decoration: none;
 }
 
 a:visited {
-	color: #0000ff;
+	color: blue;
 	text-decoration: none
 }
 
@@ -102,10 +102,14 @@ a:visited {
 		month.cal.set(Calendar.DATE, 1);
 	%>
 
-	<a
-		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
+
 	<a
 		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now - 1%>">前月</a>
+
+	&nbsp;<%=year_now%>年<%=month_now%>月&nbsp;
+
+	<a
+		href="/CalendarJsp/schedule/calendar.jsp?ID=<%=id_now%>&YEAR=<%=year_now%>&MONTH=<%=month_now + 1%>">翌月</a>
 
 	<div style="position: absolute; top: 0; right: 0;">
 		<a href="/CalendarJsp/Logout">ログアウト</a>
@@ -118,13 +122,13 @@ a:visited {
 
 	<table border="1">
 		<tr>
-			<th>日</th>
+			<th><font color="red">日</font></th>
 			<th>月</th>
 			<th>火</th>
 			<th>水</th>
 			<th>木</th>
 			<th>金</th>
-			<th>土</th>
+			<th><font color="blue">土</font></th>
 		</tr>
 
 		<%
@@ -159,7 +163,7 @@ a:visited {
 					if (Calendar.SUNDAY == month.cal.get(Calendar.DAY_OF_WEEK)) {
 			%>
 
-			<td align="left"><a id="sunday"
+			<td valign="top"><a id="sunday"
 				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
 
 			<%
@@ -167,7 +171,7 @@ a:visited {
 			%>
 
 			<!-- 日曜以外は青で表示 -->
-			<td align="left"><a
+			<td valign="top"><a
 				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
 
 			<%
