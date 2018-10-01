@@ -1,7 +1,10 @@
+<%@page import="scheduleSql.ScheduleMatterNumber"%>
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="model.*"%>
+
+
 
 
 <html>
@@ -14,8 +17,6 @@ table {
 	height: 70%;
 	table-layout: fixed;
 }
-
-
 
 a {
 	text-decoration: none;
@@ -154,25 +155,45 @@ a:visited {
 			<%
 				}
 
+				ScheduleMatterNumber smn = new ScheduleMatterNumber();
+
 				//当月の最終日まで日付けを入れていく
 				for (int i = 1; i <= max_day; i++) {
 
 					month.cal.set(Calendar.DATE, i);
+					//日毎のスケジュール件数
+					int schedule_matter_number = 0;
+					schedule_matter_number = smn.returnScheduleMatterNumber(String.valueOf(year_now), month_now, i,
+							String.valueOf(id_now));
 
 					//日曜日なら赤字で数字を表示
 					if (Calendar.SUNDAY == month.cal.get(Calendar.DAY_OF_WEEK)) {
 			%>
 
-			<td valign="top"><a id="sunday"
-				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
+			<td width="50" height="90" valign="top"><a id="sunday"
+				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a>
+
+				<%
+					//スケジュールがあれば件数をカレンダーに表示
+							if (schedule_matter_number > 0) {
+				%> <br> <br> <br> <%=schedule_matter_number%>件有 <%
+ 	}
+ %></td>
 
 			<%
 				} else {
 			%>
 
 			<!-- 日曜以外は青で表示 -->
-			<td valign="top"><a
-				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a></td>
+			<td width="50" height="90" valign="top"><a
+				href="/CalendarJsp/ScheduleToday?YEAR=<%=year_now%>&MONTH=<%=month_now%>&DAY=<%=i%>&ID=<%=id_now%>"><%=i%></a>
+
+				<%
+					//スケジュールがあれば件数をカレンダーに表示
+							if (schedule_matter_number > 0) {
+				%> <br> <br> <br> <%=schedule_matter_number%>件有 <%
+ 	}
+ %></td>
 
 			<%
 				}
